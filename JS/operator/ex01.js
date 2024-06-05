@@ -206,6 +206,20 @@ var a = 1,
 
 // Cho trước 3 số a, b, c
 
+function largestNumber(a, b, c) {
+   var largestNum = a; // Kỹ thuật hạ khoan
+
+   if (b > largestNum) {
+      largestNum = b;
+   }
+
+   if (c > largestNum) {
+      largestNum = c;
+   }
+
+   return largestNum;
+}
+
 // Output:
 
 // Tìm số lớn nhất trong 3 số và hiển thị kết quả
@@ -227,3 +241,55 @@ var a = 1,
 // Output:
 
 // Thực hiện đổi chỗ 3 số a, b, c sao cho 3 số có thứ tự tăng dần
+
+// var a = 3;
+// var b = 2;
+// var c = 1;
+
+// if (areNaN(a, b, c)) {
+//    result = "Không thể thực hiện, các giá trị phải cùng kiểu là số";
+// } else {
+//    console.log(`Trước khi sắp xếp: a = ${a} | b = ${b} | b = ${c}`);
+
+//    var num1, num2, num3, temp;
+
+//    // a = 3;
+//    // b = 2;
+//    // c = 1;
+
+//    if (a > b) {
+//       // 3 > 2
+//       temp = a;
+//       a = b;
+//       b = temp;
+//    }
+
+//    // a = 2;
+//    // b = 3;
+//    // c = 1;
+
+//    if (b > c) {
+//       // 3 > 1
+//       temp = b;
+//       b = c;
+//       c = temp;
+//    }
+
+//    // a = 2;
+//    // b = 1;
+//    // c = 3;
+
+//    if (a > b) {
+//       // 2 > 1
+//       temp = a;
+//       a = b;
+//       b = temp;
+//    }
+
+//    // a = 1;
+//    // b = 2;
+//    // c = 3;
+
+//    result = `Sau khi sắp xếp: a = ${a} | b = ${b} | b = ${c}`;
+// }
+// console.log(result);
