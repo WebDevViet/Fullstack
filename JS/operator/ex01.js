@@ -189,8 +189,8 @@ falsy => Lấy sau ||
 
 // #Bài 1: Hoán vị 2 số
 // Input: Cho trước 2 số a, b
-var a = 1,
-   b = 2;
+var $500 = 1,
+   $200 = 2;
 
 // Output: Thực hiện hoán vị 2 số không dùng biến trung gian
 
@@ -206,19 +206,19 @@ var a = 1,
 
 // Cho trước 3 số a, b, c
 
-function largestNumber(a, b, c) {
-   var largestNum = a; // Kỹ thuật hạ khoan
+// function largestNumber(a, b, c) {
+//    var largestNum = a; // Kỹ thuật hạ khoan
 
-   if (b > largestNum) {
-      largestNum = b;
-   }
+//    if (b > largestNum) {
+//       largestNum = b;
+//    }
 
-   if (c > largestNum) {
-      largestNum = c;
-   }
+//    if (c > largestNum) {
+//       largestNum = c;
+//    }
 
-   return largestNum;
-}
+//    return largestNum;
+// }
 
 // Output:
 
