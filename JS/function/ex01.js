@@ -6,6 +6,8 @@
 //   + Hàm tự định nghĩa bởi lập trình viên
 //   + Hàm có sẵn (Trình duyệt, Engine)
 
+// Lưu ý: Trong JS không có khái niệm tham chiếu, tham trị
+
 // Cú pháp:
 // function tenham() {
 //     Nội dung hàm
@@ -181,36 +183,83 @@
 
 // console.log("🚀 ~ result:", result);
 
-// TH3:
-function calcNumbers(n) {
-   if (n < 1) {
-      console.log(
-         ` 
-      function calcNumbers(${n}) {
-         if (${n} < 1) {
-            return ${n};
-         }
-      }
-      -----------------------------------------------------
-      `
-      );
-      return n;
-   }
+// // TH3:
+// function calcNumbers(n) {
+//    if (n < 1) {
+//       console.log(
+//          `
+//       function calcNumbers(${n}) {
+//          if (${n} < 1) {
+//             return ${n};
+//          }
+//       }
+//       -----------------------------------------------------
+//       `
+//       );
+//       return n;
+//    }
 
-   console.log(
-      ` 
-      function calcNumbers(${n}) {
-         if (${n} < 1) {
-            return n;
-         }
+//    console.log(
+//       `
+//       function calcNumbers(${n}) {
+//          if (${n} < 1) {
+//             return n;
+//          }
 
-         return ${n} * (${n} + 1) + calcNumbers(${n} - 1); 
-      }
-      -----------------------------------------------------
-      `
-   );
+//          return ${n} * (${n} + 1) + calcNumbers(${n} - 1);
+//       }
+//       -----------------------------------------------------
+//       `
+//    );
 
-   return n * (n + 1) + calcNumbers(n--); // 440
-}
+//    return n * (n + 1) + calcNumbers(n--); // 440
+// }
 
-console.log("🚀 ~ calcNumbers(10): ", calcNumbers(10));
+// console.log("🚀 ~ calcNumbers(10): ", calcNumbers(10));
+
+//anonymous function: Hàm ẩn danh, hàm không tên
+//Muốn thực thi
+
+/*
+Cách 1: Gán vào 1 biến (Expression Function)
+Cách 2: Đưa vào 1 hàm khác dưới dạng đối số
+*/
+
+// getMessage();
+// var getMessage; // undefined
+// console.log("🚀 ~ getMessage:", typeof getMessage);
+
+// var getMessage = function getMsg() {
+//    console.log("Học JS không khó");
+// };
+
+// function other(callback) {
+//    // console.log("🚀 ~ getMsg ~ callback:", callback(5)); // lời gọi hàm bị động (callback)
+//    // console.log("Học JS không khó");
+//    // if (typeof callback === "function") {
+//    //    callback(5);
+//    // }
+
+//    typeof callback === "function" && callback(); // && ngược lại ||
+
+//    console.log("🚀 ~ other ~ :", typeof callback);
+// }
+
+// other(function () {
+//    console.log("JS");
+// });
+
+// var handleDisplay = function (text) {
+//    console.log("handleDisplay");
+//    console.log(text);
+// };
+
+// var display = function (callback, args) {
+//    console.log("display");
+//    // console.log("🚀 ~ display ~ typeof callback:", typeof callback); ?/ undefined
+
+//    typeof callback === "function" && callback(args);
+// };
+// display(handleDisplay, "f88");
+
+// display(handleDisplay("f88"));
