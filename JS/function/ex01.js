@@ -263,3 +263,243 @@ Cách 2: Đưa vào 1 hàm khác dưới dạng đối số
 // display(handleDisplay, "f88");
 
 // display(handleDisplay("f88"));
+
+// -----------------------------------------
+
+// Từ khóa argument
+// function log2(a, b) {
+//    console.log("🚀 ~ log2 ~ a, b:", a, b);
+//    console.table(arguments);
+// }
+
+// log2("đối số 1", "đối số 2", "đối số 3");
+
+// -----------------------------------------
+
+// rest parameter
+
+// function log2(a, b, ...args) {
+//    console.log("🚀 ~ log2 ~ a:", a);
+//    console.log("🚀 ~ log2 ~ b:", b);
+
+//    console.table(args);
+// }
+
+// log2("số 1", "số 2", "c");
+
+// -----------------------------------------
+
+// spread operator
+// var arr = [1, 2, 3];
+
+// // var listStudent = [
+// //    { name: "Decao", age: 18, points: [1, 2, 3] },
+// //    { name: "ChauBui", age: 17, points: [3, 2, 1] },
+// // ];
+
+// function sum(...args) {
+//    console.log(args);
+// }
+
+// sum(...arr); // => sum(1, 2, 3)
+
+// sum(...listStudent); //   sum({ name: "Decao", age: 18, points: [1, 2, 3] }, { name: "ChauBui", age: 17, points: [3, 2, 1] })
+
+// var arr2 = {};
+// console.log("🚀 ~ arr2:", arr2);
+
+// setTimeout(
+//    (a, ...args) => {
+//       console.log(1);
+//       console.log("🚀 ~ setTimeout ~ a:", a);
+//       console.log("🚀 ~ args:", args);
+//    },
+//    1000,
+//    "16 typh",
+//    "min",
+//    "decao"
+// );
+
+// var i = 0;
+// var id = setInterval(() => {
+//    if (i >= 3) {
+//       clearInterval(id);
+//    }
+//    console.log("🚀 ~ i:", i);
+//    i++;
+// }, 1000);
+
+// var getA = function (cb) {
+//    setTimeout(() => {
+//       console.log("🚀 ~ getA");
+//       typeof cb === "function" && cb(); // getB(getC);
+//    }, 1000);
+// };
+
+// var getB = function (cb) {
+//    setTimeout(() => {
+//       console.log("🚀 ~ getB");
+//       typeof cb === "function" && cb(); // cb = getC, cb() = getC(),
+//    }, 2000);
+// };
+
+// var getC = function (cb) {
+//    setTimeout(() => {
+//       console.log("🚀 ~ getC");
+//       typeof cb === "function" && cb();
+//    }, 1500);
+// };
+
+// var getD = function (cb) {
+//    setTimeout(() => {
+//       console.log("🚀 ~ getD");
+//       typeof cb === "function" && cb();
+//    }, 1600);
+// };
+
+// getA(function () {
+//    getB(function () {
+//       getC(getD);
+//    });
+// });
+// // callback hell
+
+// setTimeout(() => {
+//    console.log("1");
+// }, 0);
+
+// console.log("2");
+
+// console.log("3");
+
+// setTimeout(() => {
+//    console.log("4");
+// }, 0);
+
+// console.log("5");
+
+/*
+Buổi sau: 
+- Định nghĩa hàm con
+- Closure
+- Kỹ thuật Thunk Function
+- IIFE
+- Giải thuật đệ quy
+
+Tìm hiểu sau: 
+- Async Function
+- Generator Function
+*/
+// --------
+// var a = 10;
+// var b = () => {};
+// console.log("🚀 ~ b:", b);
+
+// console.log(window);
+//Thuộc object là window
+// window.console.log(a);
+// Mọi thứ được tạo ra trong JS đều nằm trong window (Chỉ áp dụng với Client)
+
+// Định nghĩa hàm con
+// function funcParent(params) {
+//    function funcChild(params) {
+//       console.log(123);
+//    }
+//    funcChild();
+// }
+
+// Cú pháp truy cập: tenObject.tenHam hoặc tenObject.tenBien
+
+// var a = 10;
+
+// function display(c) {
+//    var b = 20;
+
+//    function showUser() {
+//       console.log("hello");
+//       console.log("🚀 ~ a:", a);
+//       console.log("🚀 ~ b:", b);
+//       console.log("🚀 ~ c:", c);
+//    }
+
+//    showUser();
+// }
+
+// display("16");
+
+/*
+Định nghĩa hàm bên trong 1 hàm khác, có thể: 
+- Chỉ được gọi hàm đó bên trong hàm khác (Closure)
+- Được phép sử dụng: 
++ Biến toàn cục
++ Tham số của hàm cha
++ Biến cục bộ của hàm cha
++ Tham số của chính nó
+*/
+
+// function display() {
+//    function showUser() {
+//       console.log("hello");
+//    }
+
+//    return showUser;
+// }
+
+// Chủ động gọi hàm con bên ngoài phạm vi
+// var a = display(); // Trả về giá trị mà return trả về
+/**
+ * a =  function showUser() {
+      console.log("hello");
+   }
+ * 
+*/
+// a(); // a() = showUser()
+
+// function ganSo(num) {
+//    return num;
+// }
+
+// var so = ganSo(5);
+// console.log("🚀 ~ so:", so); // so = 5
+
+// var addSum = function (a) {
+//    return function (b) {
+//       return a + b;
+//    };
+// };
+
+// // Bước 1: Tạo hàm con
+// var add = addSum(10); // add sẽ bằng giá trị return của hàm sum trả về , return thì nhận cái đấy
+// chỉ chạy addSum() chứ không chạy thằng hàm con được return
+// gán hàm con mà addSum nó return cho biến add
+/**
+ * // var sum = function (b) {
+   //    return 10 + b;
+   // };
+
+   // var add = sum
+ *
+*/
+
+// // Bước 2: Gọi hàm con
+// var result1 = add(5);
+/**
+ * var add = function(b) {
+      return 10 + b;
+   };
+
+   add(5) cũng giống như sum(5)
+ * 
+*/
+// console.log("🚀 ~ result1:", result1);
+
+// var result2 = add(2); // result2 = 12
+// var result3 = add(3); // result3 = 13
+// var result4 = add(4); // result4 = 14
+
+// IIFE(Immediately invoked function expression)
+// (function showNum(num) {
+//    console.log("🚀 ~ showNum ~ num:", num);
+// })(5);
+
+// Giải thuật đệ quy
