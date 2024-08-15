@@ -1,0 +1,82 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "user 1",
+      "email": "user1@gmail.com",
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "name": "user 2",
+      "email": "user2@gmail.com",
+      "status": "inactive"
+    },
+    {
+      "id": 3,
+      "name": "user 3",
+      "email": "user3@gmail.com",
+      "status": "active"
+    },
+    {
+      "name": "user 4",
+      "email": "user4@gmail.com",
+      "status": "active",
+      "id": 4
+    },
+    {
+      "name": "user 5",
+      "email": "user5@gmail.com",
+      "status": "inactive",
+      "id": 5
+    },
+    {
+      "name": "user 6",
+      "email": "user6@gmail.com",
+      "status": "active",
+      "id": 6
+    },
+    {
+      "name": "user 7",
+      "email": "user7@gmail.com",
+      "status": "active",
+      "id": 7
+    },
+    {
+      "name": "user 8",
+      "email": "user8@gmail.com",
+      "status": "inactive",
+      "id": 8
+    },
+    {
+      "name": "user 9",
+      "email": "user9@gmail.com",
+      "status": "inactive",
+      "id": 9
+    },
+    {
+      "name": "user 10",
+      "email": "user10@gmail.com",
+      "status": "active",
+      "id": 10
+    },
+    {
+      "name": "user 11",
+      "email": "user11@gmail.com",
+      "status": "inactive",
+      "id": 11
+    },
+    {
+      "name": "user12",
+      "email": "user12@gmail.com",
+      "status": "inactive",
+      "id": 12
+    },
+    {
+      "name": "user13",
+      "email": "user13@gmail.com",
+      "status": "active",
+      "id": 13
+    }
+  ]
+}

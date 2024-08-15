@@ -503,3 +503,41 @@ Tìm hiểu sau:
 // })(5);
 
 // Giải thuật đệ quy
+// function showNumber(n) {
+//    console.log(n);
+//    if (n > 1) {
+//       showNumber(n - 1);
+//    }
+// }
+
+// showNumber(10);
+
+// S = 1 + 2 + 3 + 4 + 5 + ... + n
+// Tính tổng các số bằng đệ quy
+
+// hàm sẽ trả về là kết quả của tổng của các số từ n giảm dần về 1
+// function total(n) {
+//    if (isNaN(n) && n % 1 !== 0) {
+//       return "đối số truyền vào phải là 1 số nguyên";
+//    }
+
+/** Cách giải
+ * 1. Tìm điểm dừng
+ *   - n giảm dần về 1 => 1 là điểm dừng => if (n === 1) thì return ko cho chạy nữa
+ * 2. Logic handle => tạo ra điểm dừng
+ *   - Biểu thức là các số từ n giảm về 1 và cách nhau 1 đơn vị => n - 1
+ * 3. Kết quả mong muốn
+ *   - Là 1 số tổng của các số từ n giảm dần về 1 => cần tạo ra các số từ n tới 1 => Tạo vòng lặp giảm dần số từ n => n - 1
+ *   - Qua các lần lặp cộng dồn dần các số từ n về 1, khi về tới 1 thì return 1 luôn
+ */
+
+//    if (n === 1) {
+//       return 1;
+//    }
+
+//    return n + total(n - 1);
+// }
+
+// var result = total(3);
+// console.log("🚀 ~ result:", result);
+/* */
