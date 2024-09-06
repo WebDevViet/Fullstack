@@ -1,0 +1,16 @@
+{
+  "name": "package",
+  "version": "1.0.0",
+  "description": "Lesson Package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^3.4.1",
+    "sass": "^1.77.8"
+  }
+}
