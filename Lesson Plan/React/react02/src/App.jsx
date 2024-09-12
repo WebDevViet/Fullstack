@@ -1,17 +1,19 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { useSelector } from './store/hook'
+import Login from './components/Auth/Login'
+import Profile from './components/Auth/Profile'
 
 // import Counter from './components/Counter'
-// import Todos from './components/Todos/Todos'
 // import PostList from './components/Post/PostList'
-import Authen from './components/Auth/Authen'
 
 export default function App() {
+  const auth = useSelector((state) => state.auth)
   return (
     <div className='container mt-5'>
       {/* <Counter /> */}
       {/* <Todos /> */}
       {/* <PostList /> */}
-      <Authen />
+      {auth.user ? <Profile /> : <Login />}
     </div>
   )
 }

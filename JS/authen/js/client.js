@@ -35,7 +35,7 @@ export const httpClient = {
     } catch (error) {
       //Gọi API để cấp lại accessToken mới (Truyền lên refreshToken)
       //Kiểm tra Response của api RefreshToken có hợp lệ không
-      // - Không hợp lệ --> Failed
+      // - Không hợp lệ --> Failed --> Logout
       // - Hợp lệ --> Lưu token mới vào Storage --> Gọi lại request bị Failed (Gọi lại hàm send)
       //Lưu ý: Xử lý trường hợp nhiều request chạy đồng thời
       if (this.accessToken) {

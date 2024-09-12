@@ -1,0 +1,27 @@
+{
+  "useState": {
+    "prefix": "us",
+    "body": ["const [$2, set$3] = useState$1($4)"],
+    "description": "useState"
+  },
+  "useEffect": {
+    "prefix": "ue",
+    "body": ["useEffect$1(() => {", "  $2", "})"],
+    "description": "useEffect"
+  },
+  "useEffect has dependencies": {
+    "prefix": "ued",
+    "body": ["useEffect$1(() => {", "  $2", "},[$3])"],
+    "description": "useEffect has dependencies"
+  },
+  "useEffect has cleanup": {
+    "prefix": "uec",
+    "body": ["useEffect$1(() => {", "  $2", "  return () => {", "    $3", "  }", "},[$4])"],
+    "description": "useEffect has cleanup"
+  },
+  "useMemo": {
+    "prefix": "um",
+    "body": ["const $2 = useMemo$1(() => $3,$4)"],
+    "description": "useMemo"
+  }
+}

@@ -1,13 +1,12 @@
-/** custom Hook
- * Tạo ra các hook riêng:
- * Có thể sử dụng với các hook khác
+/** custom Hook - Tạo ra các hook riêng
+ * Có thể sử dụng với các hook khác: hook react, custom hook
  * Tuân thủ các quy định về React hook
  */
 
 import { useContext, useReducer } from 'react'
 import { ProviderContext } from './Provider'
 
-// Tạo ra 2 hook để đọc state và dispatch từ global state
+// Tạo ra 2 hook để đọc state và dispatch từ global state (để ko cần phải import context cho từng component)
 // useSelector
 // useDispatch
 
@@ -27,26 +26,23 @@ export const useSelector = (selector) => {
 // Tạo ra 1 hook middleware để xử lý trước khi dispatch vào store
 
 export const useREducerWithMiddleware = (reducer, initialState, middleware) => {
+  // middleware là function
   const [state, dispatch] = useReducer(reducer, initialState)
   const dispatchWithMiddleware = (action) => {
-    // do Something in middleware => done => dispatch
+    if (typeof action === 'object') return dispatch(action)
 
-    // TH1: action là plain object = {type, payload}
-    if (typeof action === 'object') {
-      dispatch(action)
-    }
-
-    // TH2: action là function => có sử dụng middleware
     if (typeof middleware === 'function') {
       const store = {
-        dispatch,
-        getState: () => state
+        getState: () => state,
+        dispatch
       }
 
-      const middlewareFn = middleware(store) // hàm middleware
+      const middlewareFn = middleware(store)
+
       if (typeof middlewareFn !== 'function') {
-        throw new Error('middleware must be return a function')
+        throw new Error('Middleware must be a function')
       }
+
       middlewareFn(action)
     }
   }
@@ -54,7 +50,11 @@ export const useREducerWithMiddleware = (reducer, initialState, middleware) => {
   return [state, dispatchWithMiddleware]
 }
 
-/**
- * TH1: Có middleware => action là hàm: (dispatch, state) => {await call api => dispatch}
- * TH2: Ko có middleware => action là plain object: {type, payload}
+/** Có middleware
+ * TH1: action là function
+ * TH2: action là object
+ */
+
+/** Ko có middleware
+ * action là object
  */

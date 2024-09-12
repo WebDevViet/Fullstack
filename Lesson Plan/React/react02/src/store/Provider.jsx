@@ -11,9 +11,7 @@ import { middleware } from './middleware'
 export const ProviderContext = createContext()
 
 export default function Provider({ children }) {
-  // const [state, dispatch] = useReducer(reducer, initialState)
   const [state, dispatch] = useREducerWithMiddleware(reducer, initialState, middleware)
-
   return (
     <ProviderContext.Provider
       value={{
