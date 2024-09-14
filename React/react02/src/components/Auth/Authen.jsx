@@ -18,10 +18,14 @@ export default function Authen() {
       payload: 'idle'
     })
   }, [])
-  console.log('render Authen')
 
   return (
     <div>
+      {authen.error && (
+        <div className='alert alert-danger' role='alert'>
+          {authen.error}
+        </div>
+      )}
       <div>{authen.status === 'idle' && (authen.user ? <Profile /> : <Login />)}</div>
       <p>{authen.status === 'pending' && 'loading...'}</p>
     </div>

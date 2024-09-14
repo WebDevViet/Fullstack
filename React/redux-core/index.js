@@ -1403,3 +1403,19 @@ const arr2 = [
     city: 'Laoqiao'
   }
 ]
+
+const startTime = performance.now()
+const cityMap = {}
+arr2.forEach((item2) => {
+  cityMap[item2.id] = item2.city
+})
+
+const newArr = arr1.map((item1) => {
+  const city = cityMap[item1.cityId] || ''
+  return { ...item1, city }
+})
+const endTime = performance.now()
+const executionTime = endTime - startTime
+console.log(`Thời gian chạy của hàm map: ${executionTime.toFixed(2)} milliseconds`)
+
+console.log('🚀 ~ newArr ~ newArr:', newArr)

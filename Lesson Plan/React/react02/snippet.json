@@ -23,5 +23,15 @@
     "prefix": "um",
     "body": ["const $2 = useMemo$1(() => $3,$4)"],
     "description": "useMemo"
+  },
+  "useCallback": {
+    "prefix": "uc",
+    "body": ["const $2 = useCallback$1(() => $3,$4)"],
+    "description": "useCallback"
+  },
+  "useTransition": {
+    "prefix": "ut",
+    "body": ["const [isPending, startTransition] = useTransition$1()"],
+    "description": "useTransition"
   }
 }

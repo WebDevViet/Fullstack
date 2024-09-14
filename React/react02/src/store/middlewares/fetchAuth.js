@@ -10,6 +10,7 @@ const authenticate = async (email, password) => {
     })
   })
 
+  if (!res.ok) throw new Error('Login failed')
   const data = await res.json()
   return data
 }
@@ -20,6 +21,10 @@ export const getProfile = async (token) => {
       Authorization: `Bearer ${token}`
     }
   })
+
+  if (!res.ok) {
+    throw new Error('Get profile failed')
+  }
   const data = await res.json()
   return data
 }
@@ -38,7 +43,6 @@ export default function fetchAuth({ email, password, token }) {
         })
 
         token = await authenticate(email, password)
-        if (!token) throw new Error('Login failed')
 
         dispatch({
           type: 'authen/setToken',
@@ -48,15 +52,13 @@ export default function fetchAuth({ email, password, token }) {
 
       const profile = await getProfile(token.access_token)
 
-      if (!profile) throw new Error('Get profile failed')
-
       dispatch({
         type: 'authen/setUser',
         payload: profile
       })
     } catch (error) {
       dispatch({
-        type: 'authen/setUser',
+        type: 'authen/error',
         payload: error.message
       })
     } finally {
