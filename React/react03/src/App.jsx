@@ -1,10 +1,14 @@
-import { HightLight } from './components/HighLight'
+import { Layout } from './components'
 
 export default function App() {
   return (
     <div>
       {/* <Form /> */}
-      <HightLight />
+      {/* <Highlight /> */}
+      {/* <Counter /> */}
+      {/* <Theme /> */}
+      {/* <Comment /> */}
+      <Layout />
     </div>
   )
 }

@@ -1,48 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useState } from 'react'
+import StudentList from './StudentList'
 import { debounce } from 'lodash'
-import students from '../../assets/db.json'
 
-export default function HighLight() {
+export default function Highlight() {
   const [query, setQuery] = useState('')
-  const debouncedSetQuery = useCallback(debounce(setQuery, 400), [])
+  const [highlight, setHighlight] = useState('')
+  const debouncedSetHighlight = useCallback(debounce(setHighlight, 400), [])
 
   const handleQuery = ({ target: { value } }) => {
-    debouncedSetQuery(value)
+    setQuery(value)
+    debouncedSetHighlight(value)
   }
 
   return (
     <div>
-      <input type='text' name='query' onChange={handleQuery} />
-      <div>
-        {students.map((student) => {
-          const index = student.fullName.toLowerCase().indexOf(query.toLowerCase())
-          if (index === -1) return <p key={student.id}>{student.fullName}</p>
-
-          return (
-            <p key={student.id}>
-              {student.fullName.slice(0, index)}
-              <span style={{ backgroundColor: 'yellow' }}>{student.fullName.slice(index, index + query.length)}</span>
-              {student.fullName.slice(index + query.length)}
-            </p>
-          )
-        })}
-      </div>
+      <input type='text' value={query} name='query' onChange={handleQuery} />
+      <StudentList query={highlight} />
     </div>
   )
 }
 
 /** TH1: debounce with useCallback
-   * TODO: delete prop value of input highlight, add eslint-disable react-hooks/exhaustive-deps 
-   const debouncedSetQuery =  useCallback(debounce(setQuery, 400), [])
+   * TODO: delete prop value of input query, add eslint-disable react-hooks/exhaustive-deps 
+   const debounceSetQuery =  useCallback(debounce(setQuery, 400), [])
 
   const handleQuery = ({ target: { value } }) => {
-    debouncedSetQuery(value)
+    debounceSetQuery(value)
   }
 */
 
 /** TH2: debounce with useCallback but still has prop value input highlight
-   * TODO: add state highlight, add prop value for input highlight, in map replace query to highlight
+   * TODO: add state highlight, add prop value for input query, in map replace query to highlight, add react.memo
    const [highlight, setHighlight] = useState('')
    const debouncedSetHighlight =  useCallback(debounce(setHighlight, 400), [])
 

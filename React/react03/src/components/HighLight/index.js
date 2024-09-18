@@ -1,1 +1,3 @@
-export { default as HightLight } from './HighLight'
+import HighLight from './Highlight'
+
+export default HighLight
