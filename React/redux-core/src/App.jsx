@@ -1,9 +1,10 @@
-import { Counter } from './components'
+import { Counter, Todos } from './components'
 
 export default function App() {
   return (
-    <div>
+    <>
       <Counter />
-    </div>
+      <Todos />
+    </>
   )
 }
