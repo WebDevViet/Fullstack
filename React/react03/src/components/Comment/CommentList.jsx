@@ -5,19 +5,25 @@ export default function CommentList() {
   const [comments, setComments] = useState([])
 
   useEffect(() => {
+    let ignore = false
     fetch('https://jsonplaceholder.typicode.com/comments')
       .then((res) => res.json())
       .then((data) => {
-        setComments(data)
-        console.log('🚀 ~ .then ~ data:', data)
+        if (!ignore) {
+          setComments(data)
+          console.log('🚀 ~ .then ~ data:', data)
+        }
       })
+
+    return () => {
+      ignore = true
+    }
   }, [])
 
   useEffect(() => {
     const scroll = () => {
       console.log('scroll')
     }
-    console.log('window')
 
     window.addEventListener('scroll', scroll)
 
@@ -34,11 +40,3 @@ export default function CommentList() {
     </>
   )
 }
-
-// useEffect(() => {
-//   const scroll = (event) => {
-//     console.log('🚀 ~ //scroll ~ event:', event)
-//   }
-
-//   window.addEventListener('scroll', scroll)
-// }, [])

@@ -8,7 +8,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 3;
 
   display: flex;
   justify-content: center;
@@ -25,12 +25,12 @@
 
 .layout {
   /* z-index: default = auto; */
-  --padding-top: 20px;
   height: 200vh;
   display: flex;
 }
 
 .side__nav {
+  z-index: 2;
   position: sticky;
   top: var(--height-navbar);
   display: flex;
@@ -55,6 +55,7 @@
 }
 
 .content {
+  z-index: 1;
   flex: 10 0 auto;
   padding: calc(var(--height-navbar) + 20px) 0 20px;
   text-align: center;
@@ -63,6 +64,8 @@
 }
 
 .footer {
+  /* display: block; */
+  z-index: 1;
   padding: 20px;
   text-align: center;
   font-size: 1.5rem;

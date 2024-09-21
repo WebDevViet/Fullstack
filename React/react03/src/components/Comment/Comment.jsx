@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import CommentList from './CommentList'
-// const CommentList = lazy(() => import('./CommentList'))
+import { lazy, Suspense, useState } from 'react'
+// import CommentList from './CommentList'
+import Loading from '../Loading/Loading'
+const CommentList = lazy(() => import('./CommentList'))
 
 export default function Comment() {
   const [isOpen, setOpen] = useState(true)
@@ -12,10 +13,11 @@ export default function Comment() {
   return (
     <div>
       <button onClick={handleClick}>Show Comments</button>
+      <p>{isOpen ? 'Show Comments' : 'Hide Comments'}</p>
       {isOpen && (
-        // <Suspense fallback={<Loading />}>
-        <CommentList />
-        // </Suspense>
+        <Suspense fallback={<Loading />}>
+          <CommentList />
+        </Suspense>
       )}
     </div>
   )

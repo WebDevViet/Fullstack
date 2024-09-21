@@ -1,3 +1,9 @@
+import { Counter } from './components'
+
 export default function App() {
-  return <div>App</div>
+  return (
+    <div>
+      <Counter />
+    </div>
+  )
 }
