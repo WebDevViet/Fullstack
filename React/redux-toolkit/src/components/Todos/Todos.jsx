@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Show } from '../Core'
 import getTodos from '../../redux/middlewares/todoMiddleware'
 
 const Todos = () => {
@@ -11,8 +10,7 @@ const Todos = () => {
   useEffect(() => {
     // call api thông qua middleware
     if (!isUnmount.current) {
-      // dispatch({ type: 'todos/get' })
-      dispatch(getTodos())
+      dispatch(getTodos('Ok chưa'))
     }
 
     return () => {
@@ -26,20 +24,18 @@ const Todos = () => {
   }, [])
 
   return (
-    <Show>
-      <Show.When isTrue={errorTodos}>
+    <>
+      {errorTodos && (
         <p>
           <b>{errorTodos}</b>
         </p>
-      </Show.When>
-      <Show.Else>
-        <ul>
-          {todoList?.map((todo) => (
-            <li key={todo.id}>{todo.title}</li>
-          ))}
-        </ul>
-      </Show.Else>
-    </Show>
+      )}
+      <ul>
+        {todoList?.map((todo) => (
+          <li key={todo.id}>{todo.title}</li>
+        ))}
+      </ul>
+    </>
   )
 }
 

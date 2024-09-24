@@ -2,20 +2,23 @@ import { produce } from 'immer'
 
 const initState = {
   todoList: [],
-  setErrorTodos: null
+  errorTodos: null
 }
 
 const todosReducer = produce((state = initState, action) => {
   switch (action.type) {
-    case 'todos/set':
+    case TODO_SET:
       state.todoList = action.payload
-      return
-    case 'todos/setError':
-      state.setErrorTodos = action.payload
-      return
+      break
+    case TODO_SET_ERROR:
+      state.errorTodos = action.payload
+      break
     default:
       return state
   }
 })
+
+export const TODO_SET = 'todos/set'
+export const TODO_SET_ERROR = 'todos/setError'
 
 export default todosReducer
