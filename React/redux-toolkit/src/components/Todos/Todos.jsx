@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import getTodos from '../../redux/middlewares/todoMiddleware'
+import { Show } from '../Core'
+import { getTodos } from '../../redux/middlewares/todoMiddleware'
 
 const Todos = () => {
-  const { todoList, errorTodos } = useSelector((state) => state.todos)
+  const { todoList, status, error } = useSelector((state) => state.todos)
   const dispatch = useDispatch()
   const isUnmount = useRef(false)
 
   useEffect(() => {
     // call api thông qua middleware
     if (!isUnmount.current) {
-      dispatch(getTodos('Ok chưa'))
+      dispatch(getTodos('ôke chưa'))
     }
 
     return () => {
@@ -24,18 +25,23 @@ const Todos = () => {
   }, [])
 
   return (
-    <>
-      {errorTodos && (
+    <Show>
+      <Show.When isTrue={status === 'pending'}>
+        <p>Loading...</p>
+      </Show.When>
+      <Show.When isTrue={status === 'failed'}>
         <p>
-          <b>{errorTodos}</b>
+          <strong>{error}</strong>
         </p>
-      )}
-      <ul>
-        {todoList?.map((todo) => (
-          <li key={todo.id}>{todo.title}</li>
-        ))}
-      </ul>
-    </>
+      </Show.When>
+      <Show.Else>
+        <ul>
+          {todoList?.map((todo) => (
+            <li key={todo.id}>{todo.title}</li>
+          ))}
+        </ul>
+      </Show.Else>
+    </Show>
   )
 }
 

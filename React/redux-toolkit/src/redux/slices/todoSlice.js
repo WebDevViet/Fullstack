@@ -1,34 +1,33 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { getTodos } from '../middlewares/todoMiddleware'
 
-export const todoSlice = createSlice({
-  name: 'todo',
+const todoSlice = createSlice({
+  name: 'todos',
   initialState: {
     todoList: [],
-    status: 'idle'
+    status: 'idle',
+    error: null
   },
-  reducers: {},
+  reducers: {
+    // chuyên xử lý state client
+  },
   extraReducers: (builder) => {
-    builder.addCase(fetchTodos.pending, (state) => {
+    // giống reducers nhưng extraReducers chuyên xử lý action async API
+    builder.addCase(getTodos.pending, (state) => {
       state.status = 'pending'
     })
 
-    builder.addCase(fetchTodos.fulfilled, (state, action) => {
-      state.todoList = action.payload
+    builder.addCase(getTodos.fulfilled, (state, action) => {
       state.status = 'idle'
+      state.todoList = action.payload
     })
 
-    builder.addCase(fetchTodos.rejected, (state) => {
+    builder.addCase(getTodos.rejected, (state, action) => {
       state.status = 'failed'
+      state.error = action.error.message
     })
   }
 })
 
-//Thunk Middleware
-export const fetchTodos = createAsyncThunk('fetchTodos', async (_, { rejectWithValue }) => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/todos')
-  if (!response.ok) {
-    return rejectWithValue('No Data')
-  }
-  const todos = await response.json()
-  return todos
-})
+export const { setTodos, setError, setLoading } = todoSlice.actions
+export default todoSlice.reducer

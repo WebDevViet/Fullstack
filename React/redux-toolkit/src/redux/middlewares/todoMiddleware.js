@@ -1,16 +1,30 @@
-const getTodos = () => {
-  return async (dispatch, _, API) => {
-    try {
-      const res = await fetch(`${API}/todos`)
+//createAsyncThunk - API - extraReducers
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
-      if (!res.ok) throw new Error(res.statusText)
+export const getTodos = createAsyncThunk('todos/getTodos', async (_, { extra: { api } }) => {
+  const res = await fetch(api + '/todos')
+  const todos = await res.json()
+  return todos
+})
 
-      const todos = await res.json()
-      dispatch({ type: 'todo/set', payload: todos })
-    } catch (error) {
-      dispatch({ type: 'todo/setError', payload: error.message })
-    }
-  }
-}
+// reduxThunk - logic at client - reducers
+// import { setError, setLoading, setTodos } from '../slices/todoSlice'
 
-export default getTodos
+// const getTodos = () => {
+//   return async (dispatch) => {
+//     try {
+//       dispatch(setLoading('pending'))
+//       const res = await fetch(`https://jsonplaceholder.typicode.com/todos`)
+
+//       console.log('🚀 ~ return ~ res:', res)
+//       if (!res.ok) throw new Error(res.statusText)
+
+//       const todos = await res.json()
+//       dispatch(setTodos(todos))
+//     } catch (error) {
+//       dispatch(setError(error.message)) //status = failed
+//     }
+//   }
+// }
+
+// export default getTodos

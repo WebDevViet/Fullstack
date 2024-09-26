@@ -43,7 +43,7 @@ export default function Highlight() {
 
 /** TH3: debounce with useMemo to comply with eslint rules
    * TODO: delete eslint-disable react-hooks/exhaustive-deps 
-   const debouncedSetHighlight = useMemo(() => debounce(setHighlight, 400), [])
+  const debouncedSetHighlight = useMemo(() => debounce(setHighlight, 400), [])
 
   const handleQuery = ({ target: { value } }) => {
     setQuery(value)

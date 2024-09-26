@@ -13,7 +13,7 @@ Redux Store là nơi lưu trữ "global data" (store lưu trữ state applicatio
 - Bước 1: [Create a redux store](https://redux-toolkit.js.org/tutorials/quick-start#create-a-redux-store)
 
 > [!NOTE]
-> Với redux toolkit đã auto setup redux devtool
+> Với redux toolkit đã auto setup redux devtool, redux thunk
 
 - Bước 2: [Provide the Redux Store to React](https://redux-toolkit.js.org/tutorials/quick-start#provide-the-redux-store-to-react)
 
@@ -21,7 +21,7 @@ Redux Store là nơi lưu trữ "global data" (store lưu trữ state applicatio
 
 - Bước 3: Test với Redux dev tool => empty
 
-## Redux Slide
+## Redux Slice
 
 Slide là công cụ giúp cập nhật Redux Store
 
