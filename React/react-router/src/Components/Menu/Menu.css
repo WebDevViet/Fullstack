@@ -1,0 +1,23 @@
+.menu {
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: 2px solid black;
+  padding: 20px 0;
+  font-size: 1.5rem;
+}
+
+.menu li.active {
+  background-color: aqua;
+}
+
+.menu li.under {
+  text-decoration: underline;
+}
+
+.menu li:hover a {
+  text-decoration: underline;
+}
+
+.menu a:is(.active, .current) {
+  color: red;
+}

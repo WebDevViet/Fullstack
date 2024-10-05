@@ -29,11 +29,13 @@ const Todos = () => {
       <Show.When isTrue={status === 'pending'}>
         <p>Loading...</p>
       </Show.When>
+
       <Show.When isTrue={status === 'failed'}>
         <p>
           <strong>{error}</strong>
         </p>
       </Show.When>
+
       <Show.Else>
         <ul>
           {todoList?.map((todo) => (
