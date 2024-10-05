@@ -17,7 +17,9 @@ const Blog = () => {
         sParams[key].push(value)
       }
     })
-    sParams.page += 1
+    sParams.page ??= 0
+    sParams.limit ??= 10
+    sParams.page++
     setSearchParams(sParams)
   }
 
