@@ -196,7 +196,7 @@ const ProductList = () => {
 
 ## useOutletContext
 
-- Dùng để lấy giá trị data từ props context trong `<Outlet context={data} /> nếu được truyền tới
+- Dùng để lấy giá trị data từ props context trong `<Outlet context={data} />` nếu được truyền tới
 
 _AuthenMiddleware.jsx_
 
