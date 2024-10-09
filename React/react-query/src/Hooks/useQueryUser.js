@@ -3,10 +3,6 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import * as Req from '../services/user'
 
-// const req = axios.create({
-//   baseURL: import.meta.env.VITE_SERVER_API + '/users'
-// })
-
 /**
  * Fetches all users.
  * @param {object} queryOptions Options passed to useQuery.

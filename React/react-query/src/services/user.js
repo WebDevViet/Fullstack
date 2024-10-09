@@ -1,12 +1,11 @@
 import axios from 'axios'
-import { serverAPI } from './config'
 
 const instanceAxios = axios.create({
-  baseURL: serverAPI + '/users'
+  baseURL: import.meta.env.VITE_SERVER_API + '/users'
 })
 
-const getUserList = ({ ...opts }) => {
-  return instanceAxios.get('', { ...opts })
+const getUserList = (opts = {}) => {
+  return instanceAxios.get('', opts)
 }
 
 const getUserDetail = ({ id, ...opts }) => {

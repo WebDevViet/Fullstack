@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { Loading } from '../Components'
-import * as Req from '../services/user'
+import { getUserList } from '../services/user'
 
 const ReactFetch = () => {
   const [userList, setUserList] = useState([])
@@ -12,11 +12,13 @@ const ReactFetch = () => {
   const fetchAllPost = async () => {
     setIsLoading(true)
     try {
-      const res = await Req.getUserList()
+      const res = await getUserList()
+
       if (res?.status !== 200) throw new Error()
       setUserList(res.data)
       setIsSuccess(true)
-    } catch {
+    } catch (error) {
+      console.log('🚀 ~ fetchAllPost ~ message:', error)
       setIsError(true)
     } finally {
       setIsLoading(false)

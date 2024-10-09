@@ -87,7 +87,8 @@ const {
   isLoading, // default: true | true ngay cả khi useQuery chưa call api
   isError,
   data,
-  isFetching // isFetching = true khi đang fetching data
+  isFetching, // isFetching = true khi đang fetching data
+  isStale
 } = useQuery({
   queryKey: ['nameQuery'],
   queryFn: getData,
@@ -102,12 +103,13 @@ const {
   refetchOnReconnect: false, // default: true | tự động refetch khi có mạng trở lại
   refetchOnMount: false // default: true | có refetch khi component được mount lại hay ko (dù data đã có trong cache)
   // Cache Time
-  cacheTime: 2000, // default: 5p | life time của một data được lưu trong cache khi ko còn được sử dụng (recommend: cacheTime > staleTime)
+  cacheTime: 2000, // v4 - default: 5p | life time của một data được lưu trong cache khi ko còn được sử dụng (recommend: cacheTime > staleTime)
+  gcTime: 2000, // v5 - default: 5p | life time của một data được lưu trong cache khi ko còn được sử dụng (recommend: cacheTime > staleTime)
   staleTime: 3000, // default: 0 | time status của một data được coi là còn mới hay không, nếu có thì sẽ ko refetch
   // Callback with status
   onSuccess: () => {}, // cb call khi query thành công
   onError: () => {}, // cb call query khi thất bại
-  onSettled: () => {}, // cb call khi đã query xong
+  onSettled: () => {}, // cb call khi đã query xong, tương tự như finally
   // Dependency
   enabled: false, // default: true | nếu enabled = true thì mới query
   select: (data) => data, // default: undefined | xử lý dữ liệu trước khi trả về cho biến data, nhưng ko làm ảnh hưởng data lưu ở cache
