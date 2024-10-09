@@ -1,9 +1,10 @@
-import { useParams } from 'react-router-dom'
-import { useQueryUserDetail } from '../Hooks/queryUser'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useQueryUserDetail } from '../Hooks/useQueryUser'
 import { Loading } from '../Components'
 
 const UserDetail = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
 
   const {
     data: { name, email, status },
@@ -34,6 +35,7 @@ const UserDetail = () => {
           <b>Status:</b> {status}
         </li>
       </ul>
+      <button onClick={() => navigate(-1)}>Back</button>
     </>
   )
 }

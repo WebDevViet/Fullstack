@@ -1,12 +1,9 @@
-import { useState } from 'react'
-import { Loading } from '../Components'
 import { Link } from 'react-router-dom'
+import { Loading } from '../Components'
+import { useQueryUserList } from '../Hooks/useQueryUser'
 
 const ReactQuery = () => {
-  const [userList] = useState([])
-  const [isSuccess] = useState(false)
-  const [isError] = useState(false)
-  const [isLoading] = useState(false)
+  const { data: userList, isLoading, isError, isSuccess } = useQueryUserList()
 
   if (isLoading) {
     return <Loading />
@@ -24,7 +21,7 @@ const ReactQuery = () => {
         {userList?.map((user) => {
           return (
             <li key={user.id}>
-              <Link to={`/react-query/${user.id}`}>{user.name}</Link>
+              <Link to={`/users/${user.id}`}>{user.name}</Link>
             </li>
           )
         })}
