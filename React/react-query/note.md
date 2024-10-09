@@ -29,9 +29,7 @@ GLOBAL STATE:
 
 - Invalidating queries: Invalidating queries là quá trình xóa hoặc cập nhật các query trong cache của React Query.
 
-## How to use
-
-### Install & Config
+## Install & Config
 
 1. Cài package
 
@@ -65,7 +63,7 @@ createRoot(document.getElementById('root')).render(
 )
 ```
 
-### Use in Component
+## How to use
 
 ```jsx
 export const App = () => {
