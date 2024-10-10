@@ -17,7 +17,7 @@
 
 [![npm](https://img.shields.io/npm/v/@tanstack/react-query.svg)](https://www.npmjs.com/package/@tanstack/react-query)
 
-- [Concept React Query](./React/docs/React%20Query/)
+- [Concept React Query](./React/docs/React%20Query.md)
 
 ## Redux Toolkit
 
