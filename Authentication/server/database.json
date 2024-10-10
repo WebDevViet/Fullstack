@@ -1,0 +1,19 @@
+{
+  "access_tokens": [
+    {
+      "username": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidG9rZW5UeXBlIjoiQUNDRVNTX1RPS0VOIiwiaWF0IjoxNzI4NTc1NDk2LCJleHAiOjE3Mjg1NzU1MDZ9.SyozBwSGD62bilGtvy9U24C6ZlhoOIEhQHmJiOzxV48"
+    }
+  ],
+  "refresh_tokens": [
+    {
+      "username": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidG9rZW5UeXBlIjoiUkVGUkVTSF9UT0tFTiIsImlhdCI6MTcyODU3NTQ5NiwiZXhwIjoxNzI4NTc1NTI2fQ.Njz5vYiwasNLuZsbc85pXqVe9234GmyLE0l8sjKyEt0"
+    }
+  ],
+  "users": [{ "username": "admin", "password": "admin" }],
+  "products": [
+    { "id": 1, "name": "Iphone" },
+    { "id": 2, "name": "Samsung" }
+  ]
+}

@@ -1,4 +1,4 @@
-const arr1 = [
+const userList = [
   { id: 1, name: 'Izabel', cityId: 74 },
   { id: 2, name: 'Rasla', cityId: 16 },
   { id: 3, name: 'Timi', cityId: 79 },
@@ -1001,7 +1001,7 @@ const arr1 = [
   { id: 1000, name: 'Janka', cityId: 81 }
 ]
 
-const arr2 = [
+const cityList = [
   {
     id: 1,
     city: 'Stockholm'
@@ -1405,17 +1405,45 @@ const arr2 = [
 ]
 
 const startTime = performance.now()
-const cityMap = {}
-arr2.forEach((item2) => {
-  cityMap[item2.id] = item2.city
-})
 
-const newArr = arr1.map((item1) => {
-  const city = cityMap[item1.cityId] || ''
-  return { ...item1, city }
-})
+// Cách 1:
+
+// const cityMap = {}
+// cityList.forEach((city) => {
+//   cityMap[city.id] = city.city
+// })
+
+// const resultUserList = userList.map((user) => {
+//   const city = cityMap[user.cityId] || ''
+//   return { ...user, city }
+// })
+
+// Cách 2:
+
+// const cityMap = cityList.reduce((acc, { city }) => {
+//   if (acc[city] === void 0) {
+//     acc[city] = []
+//   }
+
+//   acc[city].push(city)
+//   return acc
+// }, {})
+
+// const resultUserList = userList.map((user) => {
+//   const city = cityMap[user.cityId] || ''
+//   return { ...user, city }
+// })
+
+// Cách 3:
+// const cityMap = Object.groupBy(cityList, ({ id }) => id)
+
+// const resultUserList = userList.map((user) => {
+//   const city = cityMap[user.cityId] || ''
+//   return { ...user, city }
+// })
+
 const endTime = performance.now()
 const executionTime = endTime - startTime
-console.log(`Thời gian chạy của hàm map: ${executionTime.toFixed(2)} milliseconds`)
+console.log(`Thời gian chạy: ${executionTime.toFixed(2)} milliseconds`)
 
-console.log('🚀 ~ newArr ~ newArr:', newArr)
+console.log('🚀 ~ resultUserList:', resultUserList)
