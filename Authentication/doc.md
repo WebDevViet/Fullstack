@@ -21,7 +21,7 @@ Sau này đi làm, phổ biến nhất là các bạn sẽ làm việc với Tok
 
 ## Token based authentication
 
-Token based authentication là cơ chế xác minh danh tính thông qua việc tạo token. Server sẽ tạo ra một chuỗi ký tự được gọi là token để định danh người dùng, Client sẽ lưu token này ở bộ nhớ, mỗi lần gọi request sẽ gửi token này lên để server xác nhận. Server có thể lưu hoặc không lưu token này tùy usercase.
+Token based authentication là cơ chế xác minh danh tính thông qua việc tạo token. Server sẽ tạo ra một chuỗi ký tự được gọi là token để định danh người dùng, Client sẽ lưu token này ở bộ nhớ, mỗi lần gọi request sẽ gửi token này lên để server xác nhận. Server có thể lưu hoặc không lưu token này tùy user case.
 
 ### Luồng hoạt động
 

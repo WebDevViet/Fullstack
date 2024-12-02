@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useQueryUserDetail } from '../Hooks/useQueryUser'
 import { Loading } from '../Components'
+import { useQueryUserDetail } from '../Hooks/useQueryUser'
 
 const UserDetail = () => {
   const { id } = useParams()

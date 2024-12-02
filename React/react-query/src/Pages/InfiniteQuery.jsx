@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
-import { useInfiniteQueryUserList } from '../Hooks/useQueryUser'
 import { Loading } from '../Components'
+import { useInfiniteQueryUserList } from '../Hooks/useQueryUser'
 
 const InfiniteQuery = () => {
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, ...rest } = useInfiniteQueryUserList()
-  console.log('🚀 ~ InfiniteQuery ~ rest:', rest)
-  console.log('🚀 ~ Home ~ data:', data)
+  // const { data, isLoading, isError, fetchNextPage, hasNextPage } = useInfiniteQueryUserList()
+
+  const { data, isLoading, isError, fetchPreviousPage, hasPreviousPage } = useInfiniteQueryUserList({
+    initialPageParam: 0
+  })
 
   if (isLoading) {
     return <Loading />
@@ -28,7 +30,8 @@ const InfiniteQuery = () => {
         })}
       </ul>
       <div>
-        <button disabled={!hasNextPage} onClick={fetchNextPage}>
+        {/* <button disabled={!hasNextPage} onClick={fetchNextPage}> */}
+        <button disabled={!hasPreviousPage} onClick={fetchPreviousPage}>
           Load More
         </button>
       </div>
@@ -38,14 +41,14 @@ const InfiniteQuery = () => {
 
 export default InfiniteQuery
 
-// {
-//   data?.pages.map((page) => {
-//     return page.data.map((user) => {
-//       return (
-//         <li key={user.id}>
-//           <Link to={`/users/${user.id}`}>{user.name}</Link>
-//         </li>
-//       )
-//     })
-//   })
-// }
+{
+  /* {data?.pages.map((page) => {
+          return page.data.map((user) => {
+            return (
+              <li key={user.id}>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </li>
+            )
+          })
+        })} */
+}

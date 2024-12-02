@@ -4,8 +4,21 @@ const instanceAxios = axios.create({
   baseURL: import.meta.env.VITE_SERVER_API + '/users'
 })
 
-const getUserList = (opts = {}) => {
-  return instanceAxios.get('', opts)
+const getUserList = async (opts = {}) => {
+  if (opts.params?._page === 0) {
+    const { headers } = await instanceAxios.head('', opts)
+    opts.params._page = Math.ceil(headers['x-total-count'] / opts.params._limit)
+  }
+
+  const { data, headers, ...rest } = await instanceAxios.get('', opts)
+  if (!opts.params) return { data, headers, ...rest }
+  let { _page, _limit } = opts.params
+
+  const totalPage = Math.ceil(headers['x-total-count'] / _limit)
+  const nextCursor = _page === totalPage ? undefined : _page + 1
+  const prevCursor = _page <= 1 ? undefined : _page - 1
+
+  return { data, nextCursor, prevCursor }
 }
 
 const getUserDetail = ({ id, ...opts }) => {

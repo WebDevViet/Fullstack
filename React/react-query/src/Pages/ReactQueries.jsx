@@ -5,9 +5,9 @@ const ReactQueries = () => {
   const queryKeys = [1, 2]
 
   const queryResults = useQueries({
-    queries: queryKeys.map((query) => ({
-      queryKey: ['user', query],
-      queryFn: async () => (await Req.getUserDetail({ id: query })).data
+    queries: queryKeys.map((queryId) => ({
+      queryKey: ['user', queryId],
+      queryFn: async () => (await Req.getUserDetail({ id: queryId })).data
     }))
   })
   console.log('🚀 ~ QueryClient ~ queryResults:', queryResults)

@@ -1,10 +1,16 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Loading } from '../Components'
 import { useQueryUserList } from '../Hooks/useQueryUser'
 
 const ReactQuery = () => {
-  const { data: userList, isLoading, isError, isSuccess, ...rest } = useQueryUserList({ retry: 1 })
-  console.log('🚀 ~ ReactQuery ~ rest:', rest)
+  const { data: userList, isLoading, isError, isSuccess } = useQueryUserList()
+
+  useEffect(() => {
+    return () => {
+      //cleanup
+    }
+  }, [])
 
   if (isLoading) {
     return <Loading />

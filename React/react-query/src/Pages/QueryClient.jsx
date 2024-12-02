@@ -1,12 +1,15 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { useQueryUserDetail } from '../Hooks/useQueryUser'
 
 const QueryClient = () => {
   const queryClient = useQueryClient()
 
-  const user1 = queryClient.getQueryData(['user', 1])
+  const user1 = queryClient.getQueryData(['user', '1'])
   console.log('🚀 ~ QueryClient ~ user1:', user1)
 
-  const queries = [1, 2]
+  const { data } = useQueryUserDetail('1')
+
+  const queries = ['2', '3']
 
   const userList = queries.map((queryId) => {
     return queryClient.getQueryData(['user', queryId])
@@ -17,9 +20,16 @@ const QueryClient = () => {
   const allUser = queryClient.getQueriesData()
   console.log('🚀 ~ QueryClient ~ users:', allUser)
 
+  const invalidateQueries = async () => {
+    queryClient.invalidateQueries({ queryKey: ['user', '1'] })
+    queryClient.invalidateQueries({ queryKey: ['user', '2'] })
+  }
+
   return (
     <>
       <h1>Query Client</h1>
+      <button onClick={invalidateQueries}>CLick</button>
+      {JSON.stringify(data)}
     </>
   )
 }

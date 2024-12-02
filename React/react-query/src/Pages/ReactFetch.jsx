@@ -13,6 +13,7 @@ const ReactFetch = () => {
     setIsLoading(true)
     try {
       const res = await getUserList()
+      console.log('🚀 ~ fetchAllPost ~ res:', res)
 
       if (res?.status !== 200) throw new Error()
       setUserList(res.data)
