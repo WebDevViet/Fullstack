@@ -1,11 +1,12 @@
 import mongoose from 'mongoose'
 import { TOKEN_TYPE } from '../constants.js'
 
-const tokenSchema = new mongoose.Schema(
+const blackListTokenSchema = new mongoose.Schema(
   {
     token: {
       type: String,
-      required: true
+      required: true,
+      index: true
     },
     type: {
       type: String,
@@ -16,6 +17,6 @@ const tokenSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-const Token = mongoose.model('token', tokenSchema)
+const BlackListToken = mongoose.model('black_list_token', blackListTokenSchema)
 
-export default Token
+export default BlackListToken

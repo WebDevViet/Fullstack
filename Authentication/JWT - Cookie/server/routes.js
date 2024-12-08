@@ -1,13 +1,59 @@
-import { Router } from 'express'
-import { getProfileController, getProductsController, loginController, refreshTokenController } from './controller.js'
-import { handleReqRes } from './utils/handleReqRes.js'
-const router = Router()
+// import { Router } from 'express'
 
-router.post('/login', handleReqRes(loginController))
-router.post('/refresh-token', handleReqRes(refreshTokenController))
-router.get('/logout', handleReqRes(getProductsController))
+// import {
+//   getProductsController,
+//   getProfileController,
+//   loginController,
+//   logoutController,
+//   refreshTokenController
+// } from './controller.js'
 
-router.get('/profile', handleReqRes(getProfileController))
-router.get('/products', handleReqRes(getProductsController))
+// import { accessTokenMiddleware, refreshTokenMiddleware, unsealTokenMiddleware } from './middlewares/index.js'
 
-export default router
+// import resHandler from './helper/resHandler.js'
+
+// const router = Router()
+
+// router.post('/login', resHandler(loginController))
+
+// router.use(unsealTokenMiddleware)
+
+// router.use(accessTokenMiddleware)
+// router.use('/refresh-token', refreshTokenMiddleware)
+
+// router.get('/logout', resHandler(logoutController))
+// router.post('/refresh-token', resHandler(refreshTokenController))
+
+// router.get('/profile', resHandler(getProfileController))
+// router.get('/products', resHandler(getProductsController))
+
+// export default router
+
+import CustomRouter from './helper/customRouter.js'
+
+import {
+  getProductsController,
+  getProfileController,
+  loginController,
+  logoutController,
+  refreshTokenController
+} from './controller.js'
+
+import { accessTokenMiddleware, refreshTokenMiddleware, unsealTokenMiddleware } from './middlewares/index.js'
+
+const router = new CustomRouter()
+
+router.post('/login', loginController)
+
+router.use(unsealTokenMiddleware)
+
+router.use(accessTokenMiddleware)
+router.use('/refresh-token', refreshTokenMiddleware)
+
+router.get('/logout', logoutController)
+router.post('/refresh-token', refreshTokenController)
+
+router.get('/profile', getProfileController)
+router.get('/products', getProductsController)
+
+export default router.export()

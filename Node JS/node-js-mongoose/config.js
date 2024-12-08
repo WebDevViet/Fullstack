@@ -1,19 +1,5 @@
 import mongoose from 'mongoose'
 
-export const configJWT = {
-  JWT_EXP_ACCESS_TOKEN: 10, // 10 second
-  JWT_EXP_REFRESH_TOKEN: 30, //30 second,
-  audience: 'https://example.com', // FE
-  issuer: 'https://auth.example.com' // BE
-}
-
-export const configSetCookie = {
-  httpOnly: true,
-  maxAge: configJWT.JWT_EXP_REFRESH_TOKEN * 1000,
-  sameSite: 'none',
-  secure: true
-}
-
 export const connectionMongo = async () => {
   mongoose.connection.on('connected', () => console.log('connected'))
   mongoose.connection.on('open', () => console.log('open'))

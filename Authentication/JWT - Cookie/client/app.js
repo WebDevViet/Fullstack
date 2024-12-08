@@ -1,20 +1,18 @@
 class Http {
   constructor() {
     this.instance = axios.create({
-      baseURL: 'http://localhost:4000/',
+      baseURL: 'http://localhost:4000',
       timeout: 10000,
       withCredentials: true
     })
     let refreshingToken = null
-
-    // Mỗi req được gửi đi sẽ kèm theo header nếu có
 
     this.refreshToken = async () => {
       try {
         const tokenNew = await this.instance.post('refresh-token')
         return tokenNew
       } catch (error) {
-        throw error
+        throw error.response
       }
     }
 
@@ -29,13 +27,11 @@ class Http {
         refreshingToken ??= this.refreshToken()
         try {
           await refreshingToken
-          // Đã refreshToken thành công => trả về access token mới - cookie đã có access token mới
-          // error.response.config: thông tin của req của trước đó bị exp (config: method, header, body)
-          return this.instance(error.response.config) // chạy lại req trước đó do access Token bị exp
+          return this.instance(error.response.config)
         } catch (refreshTokenError) {
           throw refreshTokenError
         } finally {
-          refreshingToken = null // để cho req tiếp theo chạy lại refreshToken() mới nếu bị access exp
+          refreshingToken = null
         }
       }
       throw error
@@ -59,7 +55,6 @@ const fetchProfile = () => {
   http
     .get('profile')
     .then((res) => {
-      // res = res.data
       console.log('🚀 ~ fetchProfile ~ res:', res)
     })
     .catch((error) => {
@@ -110,5 +105,23 @@ document.getElementById('btn-get-both').addEventListener('click', (event) => {
 })
 
 document.getElementById('btn-refresh-token').addEventListener('click', (event) => {
-  http.refreshToken()
+  http
+    .refreshToken()
+    .then((res) => {
+      console.log('🚀 ~ .then ~ res:', res)
+    })
+    .catch((error) => {
+      console.log('🚀 ~ document.getElementById ~ error:', error)
+    })
+})
+
+document.getElementById('btn-logout').addEventListener('click', (event) => {
+  http
+    .get('logout')
+    .then((res) => {
+      console.log('🚀 ~ .then ~ res:', res)
+    })
+    .catch((error) => {
+      console.log('🚀 ~ document.getElementById ~ error:', error)
+    })
 })

@@ -31,8 +31,8 @@ Khi sử dụng `logger('dev')`, middleware sẽ ghi lại thông tin về các 
 
 - Phương thức request (GET, POST, PUT, DELETE,...)
 - Đường dẫn URL của request
-- Thời gian thực hiện request
 - Mã trạng thái response (200, 404, 500,...)
+- Thời gian thực hiện request
 - Kích thước response
 
 Thông tin này sẽ được ghi lại trong console (trình điều khiển) khi ứng dụng Express.js chạy ở chế độ phát triển (development).
@@ -49,7 +49,6 @@ Trong đó:
 - `/`: đường dẫn URL của request
 - `200`: mã trạng thái response
 - `10.123 ms`: thời gian thực hiện request
-- `-`: không có thông tin về kích thước response
 - `12`: kích thước response (bytes)
 
 Tóm lại, dòng code `app.use(logger('dev'))` giúp bạn dễ dàng theo dõi và debug ứng dụng Express.js bằng cách ghi lại thông tin về các request và response.

@@ -5,23 +5,38 @@ import { connectionMongo } from './config.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 // import https from 'https'
+// import fs from 'fs'
 import http from 'http'
+import session from 'express-session'
+import flash from 'connect-flash'
 
 const port = process.env.PORT || 4000
 const app = express()
 
 app.use(
   cors({
-    origin: 'http://127.0.0.1:5500',
+    origin: 'http://localhost:5539',
     credentials: true
   })
 )
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+
+app.use(
+  session({
+    secret: 'yourSecretKey',
+    resave: false,
+    saveUninitialized: false
+  })
+)
+
+app.use(flash())
+
 app.use(router)
 ;(async () => {
   await connectionMongo()
+  // https
   http
     .createServer(
       // {

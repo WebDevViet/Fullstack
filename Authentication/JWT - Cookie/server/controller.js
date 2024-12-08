@@ -1,14 +1,15 @@
-import fs from 'fs'
 import bcrypt from 'bcrypt'
 
-import User from './models/user.js'
-import Token from './models/token.js'
 import Product from './models/product.js'
+import User from './models/user.js'
+import BlackListToken from './models/blackListToken.js'
 
 import { configJWT } from './config.js'
 import { STATUS, TOKEN_TYPE } from './constants.js'
-import { signToken } from './helper/jwt.js'
-import verifyUserByToken from './helper/verifyToken.js'
+import TokenHandler from './helper/jwt.js'
+import { UAParser } from 'ua-parser-js'
+
+const tokenHandler = new TokenHandler()
 
 const { audience, issuer } = configJWT
 const options = { audience, issuer }
@@ -19,7 +20,7 @@ export const loginController = async (req) => {
   if (!email || !password) {
     throw {
       status: STATUS.BAD_REQUEST,
-      response: { message: 'Email và mật khẩu là bắt buộc.' }
+      response: { message: 'Email and password are required' }
     }
   }
 
@@ -29,121 +30,142 @@ export const loginController = async (req) => {
     throw {
       status: STATUS.UNAUTHORIZED,
       response: {
-        message: 'Email hoặc mật khẩu chưa chính xác!'
+        message: 'Email or password is incorrect'
       }
     }
   }
 
-  options.subject = user._id.toString()
+  const userAgent = UAParser(req.headers['user-agent'])
+  options.subject = `${user.name} / ${userAgent.os.name}`
 
-  const accessToken$ = signToken(
+  const accessToken$ = tokenHandler.sign(
     {
+      userId: user._id,
       username: user.name,
       tokenType: TOKEN_TYPE.ACCESS_TOKEN
     },
     configJWT.JWT_EXP_ACCESS_TOKEN,
     options
   )
-  const refreshToken$ = signToken(
+  const refreshToken$ = tokenHandler.sign(
     {
+      userId: user._id,
       username: user.name,
       tokenType: TOKEN_TYPE.REFRESH_TOKEN
     },
     configJWT.JWT_EXP_REFRESH_TOKEN,
     options
   )
-  const [access_token, refresh_token] = await Promise.all([accessToken$, refreshToken$])
-  // stateless => token được lưu ở client thôi
+  const [accessToken, refreshToken] = await Promise.all([accessToken$, refreshToken$])
+
   return {
     status: STATUS.OK,
     response: {
-      message: 'Đăng nhập thành công'
+      message: 'Login success'
     },
     token: {
-      access_token,
-      refresh_token
+      accessToken,
+      refreshToken
     }
   }
 }
 
 export const refreshTokenController = async (req) => {
-  const refresh_token = req.cookies?.token?.refresh_token
+  const { userId, username, sub } = req?.tokenPayload
+  options.subject = sub
 
-  if (!refresh_token) {
-    throw {
-      status: STATUS.BAD_REQUEST,
-      response: { message: 'Token không hợp lệ' }
-    }
-  }
-
-  const user = await verifyUserByToken(refresh_token, TOKEN_TYPE.REFRESH_TOKEN)
-
-  options.subject = user._id.toString()
-  const access_token = await signToken(
+  const accessToken$ = tokenHandler.sign(
     {
-      username: user.name,
+      userId,
+      username,
       tokenType: TOKEN_TYPE.ACCESS_TOKEN
     },
     configJWT.JWT_EXP_ACCESS_TOKEN,
     options
   )
 
+  const refreshToken$ = tokenHandler.sign(
+    {
+      userId,
+      username,
+      tokenType: TOKEN_TYPE.REFRESH_TOKEN
+    },
+    configJWT.JWT_EXP_REFRESH_TOKEN,
+    options
+  )
+
+  const [accessToken, refreshToken] = await Promise.all([accessToken$, refreshToken$])
+
+  const refreshTokenOld = req?.token?.refreshToken
+  await BlackListToken.create({ token: refreshTokenOld, type: TOKEN_TYPE.REFRESH_TOKEN })
+
   return {
     status: STATUS.OK,
     response: {
-      message: 'Refresh Token thành công'
+      message: 'Refresh Token success'
     },
     token: {
-      access_token,
-      refresh_token
+      accessToken,
+      refreshToken
     }
   }
 }
 
 export const getProfileController = async (req) => {
-  const access_token = req.cookies?.token?.access_token
+  const { userId } = req?.tokenPayload
+  const user = await User.findById(userId).lean().exec()
 
-  if (!access_token) {
+  if (!user) {
     throw {
-      status: STATUS.BAD_REQUEST,
-      response: { message: 'Token không hợp lệ' }
+      status: STATUS.NOT_FOUND,
+      response: { message: 'User not found' }
     }
   }
 
-  const user = await verifyUserByToken(access_token, TOKEN_TYPE.ACCESS_TOKEN)
   delete user.password
 
   return {
     status: STATUS.OK,
-    response: { message: 'Lấy thông tin profile thành công', data: user }
+    response: { message: 'Get profile success', data: user }
   }
 }
 
-export const getProductsController = async (req) => {
-  const access_token = req.cookies?.token?.access_token
-
-  if (!access_token) {
-    throw {
-      status: STATUS.BAD_REQUEST,
-      response: { message: 'Token không hợp lệ' }
-    }
-  }
-
-  await verifyUserByToken(access_token, TOKEN_TYPE.ACCESS_TOKEN)
-
+export const getProductsController = async () => {
   const products = await Product.find({}).exec()
 
   if (!products) {
     throw {
       status: STATUS.NOT_FOUND,
-      response: { message: 'Không tìm thấy sản phẩm' }
+      response: { message: 'Products not found' }
     }
   }
 
   return {
     status: STATUS.OK,
-    response: { message: 'Lấy dang sách sản phẩm thành công', data: products }
+    response: { message: 'Get products success', data: products }
   }
 }
 
-export const logoutController = async (req, res) => {}
+export const logoutController = async (req, res) => {
+  const { accessToken, refreshToken } = req?.token
+
+  try {
+    const refreshTokenVerifier = new TokenHandler(TOKEN_TYPE.REFRESH_TOKEN)
+    await Promise.all([
+      BlackListToken.create({ token: accessToken, type: TOKEN_TYPE.ACCESS_TOKEN }),
+      refreshTokenVerifier.verify(refreshToken)
+    ])
+    await BlackListToken.create({ token: refreshToken, type: TOKEN_TYPE.REFRESH_TOKEN })
+  } catch (error) {
+    if (error.response.name !== `EXPIRED_${TOKEN_TYPE.REFRESH_TOKEN}`) {
+      throw error
+    }
+  } finally {
+    res.clearCookie('token')
+  }
+
+  return {
+    status: STATUS.OK,
+    response: { message: 'Logout success' }
+  }
+}
