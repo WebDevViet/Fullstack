@@ -163,7 +163,6 @@ interface State {
 
 // type Person = Name | Age
 
-// Mình thích dùng type hơn
 
 const handleClick = <Type>(value: Type) => value
 

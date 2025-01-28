@@ -1,0 +1,51 @@
+# BLOG
+@host = http://localhost:4000/api
+@userId=6762366230adcfd63bd94de6
+@blogId=
+
+### GET 
+GET {{host}}/blogs
+
+### CREATE 
+POST {{host}}/users/{{userId}}/blogs
+Content-Type: application/json
+
+{
+  "title": "Tiêu đề",
+  "content": "Nội dung"
+}
+
+### UPDATE 
+
+PATCH  {{host}}/users/{{userId}}/blogs/{{blogId}}
+Content-Type: application/json
+
+{
+  "title": "Tiêu đề",
+  "content": "Nội dung"
+}
+
+### DELETE
+DELETE {{host}}/users/{{userId}}/blogs/{{blogId}}
+
+### CREATE MANY
+POST {{host}}/users/{{userId}}/blogs/bulk
+Content-Type: application/json
+
+[
+  {
+    "title": "Tiêu đề 1",
+    "content": "Nội dung 2"
+  },
+  {
+    "title": "Tiêu đề 3",
+    "content": "Nội dung 4"
+  }
+]
+
+
+### DELETE MANY
+DELETE {{host}}/users/{{userId}}/blogs/bulk
+Content-Type: application/json
+
+[]

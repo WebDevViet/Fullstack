@@ -1,0 +1,67 @@
+@host = http://localhost:4000/api
+@userId=676245aef185264feb007dec
+
+
+### GET USER
+GET {{host}}/users
+# GET {{host}}/users?sort=createdAt
+# GET {{host}}/users?sort=-createdAt
+# GET {{host}}/users?address.city=An Nhơn
+# GET {{host}}/users?name=/Đình/
+# GET {{host}}/users?_id={{userId}}
+# GET {{host}}/users?_id={{userId}}&populate=blogs,groups
+
+### ADD USER
+POST {{host}}/users
+Content-Type: application/json
+
+{
+  "name": "Đình Luân",
+  "phone": "0526657990",
+  "email": "PhuocHue8@hotmail.com",
+  "address": {
+    "city": "Hải Dương",
+    "zip_code": "123456"
+  }
+}
+
+### UPDATE USER
+PATCH {{host}}/users/{{userId}}
+Content-Type: application/json
+
+{
+  "name": "ok new",
+  "email": "new@hotmail.com",
+  "address": {
+    "city": "Saigon",
+    "zip_code": "123456"
+  }
+}
+
+### DELETE USER
+DELETE {{host}}/users/{{userId}}
+
+### RESTORE USER
+DELETE {{host}}/users/{{userId}}/restore
+
+### ADD USERS
+POST {{host}}/users/bulk
+Content-Type: application/json
+
+[]
+
+### DELETE USERS
+DELETE {{host}}/users/bulk
+Content-Type: application/json
+
+[]
+
+### DEMO
+
+POST {{host}}/demo
+Content-Type: application/json
+
+{
+  "password": "khai123",
+  "confirmPassword": "khai23"
+}
