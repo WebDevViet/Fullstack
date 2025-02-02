@@ -7,7 +7,7 @@ import { verifyToken } from '~/global/helpers/handleJWT.ts'
 import type { AccessTokenPayload } from '~/global/types/JWT.ts'
 import { bearerTokenRegex, jwtRegex } from '~/global/utils/regex.ts'
 import { validateAsyncBody, validateAsyncHeaders } from '~/global/utils/validate.ts'
-import { userValid } from '../users/schemas/usersSchemas.ts'
+import userValidation from '../users/schemas/userValidation.ts'
 import usersServices from '../users/usersServices.ts'
 import { AUTH_MESSAGES } from './constants/authMessages.ts'
 
@@ -93,17 +93,17 @@ class AuthValidate extends TokenValidate {
   // Register
   register = validateBody(
     Joi.object({
-      name: userValid.extract('name'),
-      email: userValid.extract('email'),
-      password: userValid.extract('password'),
-      confirmPassword: userValid.extract('confirmPassword'),
-      dateOfBirth: userValid.extract('dateOfBirth')
+      name: userValidation.extract('name'),
+      email: userValidation.extract('email'),
+      password: userValidation.extract('password'),
+      confirmPassword: userValidation.extract('confirmPassword'),
+      dateOfBirth: userValidation.extract('dateOfBirth')
     }).options({ presence: 'required', abortEarly: false })
   )
 
   // Login
   login = validateBody(
-    Joi.object({ email: userValid.extract('email'), password: userValid.extract('password') }).options({
+    Joi.object({ email: userValidation.extract('email'), password: userValidation.extract('password') }).options({
       presence: 'required',
       abortEarly: false
     })
@@ -171,8 +171,8 @@ class AuthValidate extends TokenValidate {
   resetPassword = validateAsyncBody(
     Joi.object({
       forgotPasswordToken: this.forgotPasswordToken,
-      password: userValid.extract('password'),
-      confirmPassword: userValid.extract('confirmPassword')
+      password: userValidation.extract('password'),
+      confirmPassword: userValidation.extract('confirmPassword')
     }),
     { valueField: 'forgotPasswordToken', nameAssignment: 'userId' }
   )

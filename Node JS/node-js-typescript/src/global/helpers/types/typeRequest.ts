@@ -1,5 +1,3 @@
-import type { Request } from 'express'
-import type { ParamsDictionary } from 'express-serve-static-core'
 import type { UserId } from '~/global/types/common.ts'
 import type { Authorization } from '~/global/types/JWT.ts'
 
@@ -10,12 +8,7 @@ export type ValidatedRequest<
   ReqParams = undefined,
   ReqQuery = undefined,
   ReqHeaders = undefined
-> = Request<
-  ReqParams extends undefined ? ParamsDictionary : ReqParams,
-  any,
-  ReqBody extends undefined ? {} : ReqBody,
-  ReqQuery extends undefined ? qs.ParsedQs : ReqQuery
-> & {
+> = {
   validationValues: {
     body: ReqBody
     params: ReqParams

@@ -50,9 +50,14 @@ router.post(
 )
 
 /** Unfollow user
- * @route POST /api/users/:username/unfollow
+ * @route POST /api/users/unfollow-user/:followedUserId
  * @header { Authorization: Bearer <token> }
  */
-// router.post('/:username/unfollow', authValidates.accessToken, reqHandler(usersControllers.unfollowUser))
+router.delete(
+  '/unfollow-user/:followedUserId',
+  authValidates.verifiedUser,
+  usersValidates.unfollowUser,
+  reqHandler(usersControllers.unfollowUser)
+)
 
 export default router

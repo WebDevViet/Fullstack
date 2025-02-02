@@ -5,5 +5,7 @@ export const USERS_MESSAGES = {
   FOLLOW_USER_SUCCESS: 'Follow user successfully.',
   UNFOLLOW_USER_SUCCESS: 'Unfollow user successfully.',
   USER_TO_FOLLOW_NOT_FOUND: 'User to follow not found.',
-  USER_ALREADY_FOLLOWED: 'User already followed'
+  USER_ALREADY_FOLLOWED: 'User already followed',
+  USER_TO_UNFOLLOW_NOT_FOUND: 'User to unfollow not found.',
+  USER_NOT_FOLLOWED_YET: 'User not followed yet'
 }

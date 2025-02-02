@@ -2,12 +2,16 @@ import { camelCase, snakeCase } from 'change-case/keys'
 import { ObjectId, type Filter, type FindOneAndUpdateOptions, type FindOptions, type UpdateFilter } from 'mongodb'
 import mongoDB from '~/config/database/mongoDB.ts'
 import Follower from './schemas/followersSchemas.ts'
-import type { UserType } from './schemas/usersSchemas.ts'
 import createHttpError from 'http-errors'
 import { AUTH_MESSAGES } from '../auth/constants/authMessages.ts'
 import type User from './schemas/usersSchemas.ts'
 import { USERS_MESSAGES } from './constants/usersMessages.ts'
-import type { MyProfileResult, UserProfileResult } from './types/usersRequests.ts'
+import type {
+  MyProfileResult,
+  UpdateMyProfileBody,
+  UpdateMyProfileBodySnakeCase,
+  UserProfileResult
+} from './types/usersRequests.ts'
 
 const projection = { password: 0, email_verification_token: 0, forgot_password_token: 0 }
 
@@ -55,11 +59,11 @@ class UsersServices {
     return camelCase(user) as MyProfileResult
   }
 
-  async updateMyProfile(userId: ObjectId, userPayload: Partial<UserType>) {
+  async updateMyProfile(userId: ObjectId, userPayload: UpdateMyProfileBody) {
     const user = await this.findOneAndUpdateUser(
       { _id: userId },
       {
-        $set: snakeCase(userPayload) as Partial<User>,
+        $set: snakeCase(userPayload) as UpdateMyProfileBodySnakeCase,
         $currentDate: { updated_at: true }
       },
       { projection, returnDocument: 'after' }
@@ -74,6 +78,14 @@ class UsersServices {
     if (follower) throw createHttpError.Conflict(USERS_MESSAGES.USER_ALREADY_FOLLOWED)
 
     await mongoDB.followers.insertOne(new Follower({ userId, followedUserId }))
+  }
+
+  async unfollowUser(userId: ObjectId, followedUserId: ObjectId) {
+    const follower = await mongoDB.followers.findOne({ user_id: userId, followed_user_id: followedUserId })
+
+    if (!follower) throw createHttpError.BadRequest(USERS_MESSAGES.USER_NOT_FOLLOWED_YET)
+
+    await mongoDB.followers.deleteOne({ user_id: userId, followed_user_id: followedUserId })
   }
 }
 

@@ -5,10 +5,10 @@ import mongoDB from '~/config/database/mongoDB.ts'
 import { TokenType, UserVerifyStatus } from '~/global/constants/enum.ts'
 import { signToken } from '~/global/helpers/handleJWT.ts'
 import User from '../users/schemas/usersSchemas.ts'
+import usersServices from '../users/usersServices.ts'
 import { AUTH_MESSAGES } from './constants/authMessages.ts'
 import RefreshToken from './schemas/refreshTokenSchemas.ts'
-import type { LoginBody, RegisterBody } from './types/authRequests.ts'
-import usersServices from '../users/usersServices.ts'
+import type { LoginBody, RegisterBodyValid } from './types/authRequests.ts'
 
 class AuthServices {
   private signEmailVerificationToken(userId: ObjectId) {
@@ -87,7 +87,7 @@ class AuthServices {
     return { accessToken, refreshToken }
   }
 
-  async register({ name, email, password, dateOfBirth }: RegisterBody) {
+  async register({ name, email, password, dateOfBirth }: RegisterBodyValid) {
     const user = await usersServices.getUserByEmail(email)
 
     if (user) throw createHttpError.Conflict(AUTH_MESSAGES.EMAIL_ALREADY_EXIST)
@@ -106,7 +106,7 @@ class AuthServices {
         email,
         password,
         emailVerificationToken,
-        dateOfBirth: new Date(dateOfBirth)
+        dateOfBirth: dateOfBirth
       })
     )
 

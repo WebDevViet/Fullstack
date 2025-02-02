@@ -4,6 +4,7 @@ import type {
   followUserRequest,
   GetMyProfileRequest,
   GetUserProfileRequest,
+  UnfollowUserRequest,
   UpdateMyProfileRequest
 } from './types/usersRequests.ts'
 import usersServices from './usersServices.ts'
@@ -30,6 +31,12 @@ const usersControllers = {
     await usersServices.followUser(req.userId, req.validationValues.body.followedUserId)
 
     res.json({ message: USERS_MESSAGES.FOLLOW_USER_SUCCESS })
+  },
+
+  unfollowUser: async (req: UnfollowUserRequest, res: Response) => {
+    await usersServices.unfollowUser(req.userId, req.validationValues.params.followedUserId)
+
+    res.json({ message: USERS_MESSAGES.UNFOLLOW_USER_SUCCESS })
   }
 }
 

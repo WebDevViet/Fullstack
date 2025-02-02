@@ -41,6 +41,15 @@ export interface UpdateMyProfileBody {
   website?: string
 }
 
+export interface UpdateMyProfileBodySnakeCase {
+  name?: string
+  date_of_birth?: Date
+  username?: string
+  bio?: string
+  location?: string
+  website?: string
+}
+
 export type UpdateMyProfileRequest = AuthenticatedRequest<UpdateMyProfileBody>
 
 // Follow user
@@ -50,3 +59,10 @@ export interface followUserBody {
 }
 
 export type followUserRequest = AuthenticatedRequest<followUserBody>
+
+// Unfollow user
+export interface UnfollowUserParams {
+  followedUserId: ObjectId
+}
+
+export type UnfollowUserRequest = AuthenticatedRequest<undefined, UnfollowUserParams>
