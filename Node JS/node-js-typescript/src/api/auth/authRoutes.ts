@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { reqHandler } from '~/global/utils/reqHandler.ts'
 import authControllers from './authControllers.ts'
-import authValidates from './authMiddlewares.ts'
+import authMiddlewares from './authMiddlewares.ts'
 
 const router = Router()
 
@@ -9,20 +9,20 @@ const router = Router()
  * @route POST /api/auth/register
  * @body { name: string, email: string, password: string, confirmPassword: string, dateOfBirth: ISO8601 }
  */
-router.post('/register', authValidates.register, reqHandler(authControllers.register))
+router.post('/register', authMiddlewares.register, reqHandler(authControllers.register))
 
 /** Login
  * @route POST /api/auth/login
  * @body { email: string, password: string }
  */
-router.post('/login', authValidates.login, reqHandler(authControllers.login))
+router.post('/login', authMiddlewares.login, reqHandler(authControllers.login))
 
 /** Logout
  * @route POST /api/auth/logout
  * @header { Authorization: Bearer <token> }
  * @body { refreshToken: string }
  */
-router.post('/logout', authValidates.accessToken, authValidates.logout, reqHandler(authControllers.logout))
+router.post('/logout', authMiddlewares.accessToken, authMiddlewares.logout, reqHandler(authControllers.logout))
 
 /** Refresh token
  * @route POST /api/auth/refresh-token
@@ -37,8 +37,8 @@ router.post('/logout', authValidates.accessToken, authValidates.logout, reqHandl
  */
 router.post(
   '/verify-email',
-  authValidates.accessToken,
-  authValidates.verifyEmail,
+  authMiddlewares.accessToken,
+  authMiddlewares.verifyEmail,
   reqHandler(authControllers.verifyEmail)
 )
 
@@ -46,13 +46,13 @@ router.post(
  * @route POST /api/auth/resend-verify-email
  * @header { Authorization: Bearer <token> }
  */
-router.post('/resend-verify-email', authValidates.accessToken, reqHandler(authControllers.resendVerificationEmail))
+router.post('/resend-verify-email', authMiddlewares.accessToken, reqHandler(authControllers.resendVerificationEmail))
 
 /** Forgot password
  * @route POST /api/auth/forgot-password
  * @body { email: string }
  */
-router.post('/forgot-password', authValidates.forgotPassword, reqHandler(authControllers.forgotPassword))
+router.post('/forgot-password', authMiddlewares.forgotPassword, reqHandler(authControllers.forgotPassword))
 
 /** Verify forgot password token
  * @route POST /api/auth/verify-forgot-password-token
@@ -60,7 +60,7 @@ router.post('/forgot-password', authValidates.forgotPassword, reqHandler(authCon
  */
 router.post(
   '/verify-forgot-password-token',
-  authValidates.verifyForgotPasswordToken,
+  authMiddlewares.verifyForgotPasswordToken,
   reqHandler(authControllers.verifyForgotPasswordToken)
 )
 
@@ -68,6 +68,24 @@ router.post(
  * @route POST /api/auth/reset-password
  * @body { resetPasswordToken: string, password: string, confirmPassword: string }
  */
-router.post('/reset-password', authValidates.resetPassword, reqHandler(authControllers.resetPassword))
+router.post('/reset-password', authMiddlewares.resetPassword, reqHandler(authControllers.resetPassword))
+
+/** Change Password
+ * @route POST /api/auth/change-password
+ * @header { Authorization: Bearer <token> }
+ * @body { oldPassword: string, newPassword: string, confirmNewPassword: string }
+ */
+router.put(
+  '/change-password',
+  authMiddlewares.verifiedUser,
+  authMiddlewares.changePassword,
+  reqHandler(authControllers.changePassword)
+)
+
+/** OAuth Google
+ * @route GET /api/auth/oauth/google
+ * @query { code: string }
+ */
+router.get('/oauth/google', reqHandler(authControllers.oauthGoogle))
 
 export default router

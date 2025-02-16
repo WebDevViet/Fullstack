@@ -1,15 +1,13 @@
 export const AUTH_MESSAGES = {
-  EMAIL_ALREADY_EXIST: 'Email already exist.',
-  INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again.',
-  EMAIL_ALREADY_VERIFIED: 'Email already verified.',
-  USER_NOT_FOUND: 'User not found.',
-  RESEND_VERIFY_EMAIL_SUCCESS: 'Resend verify email successfully.',
-  LOGOUT_SUCCESS: 'Logout successfully.',
-  CHECK_EMAIL_TO_RESET_PASSWORD: 'Please check your email to reset your password.',
-  VERIFY_FORGOT_PASSWORD_TOKEN_SUCCESS: 'Verification forgot password token successfully.',
-  VERIFY_EMAIL_SUCCESS: 'Verify email successfully.',
-  REGISTER_SUCCESS: 'Register successfully.',
-  RESET_PASSWORD_SUCCESS: 'Reset password successfully.',
-  LOGIN_SUCCESS: 'Login successfully.',
-  USER_NOT_VERIFIED: 'User not verified.'
-}
+  USER_NOT_VERIFIED: 'User not verified',
+  EMAIL_ALREADY_EXIST: 'Email already exist',
+  EMAIL_ALREADY_VERIFIED: 'Email already verified',
+  OAUTH_GOOGLE_EMAIL_NOT_VERIFIED: 'OAuth Google email not verified',
+  PASSWORD_NOT_MATCH: 'Password confirmation does not match',
+  INCORRECT_EMAIL_OR_PASSWORD: 'Incorrect email or password. Please try again',
+  FORGOT_PASSWORD_TOKEN_INVALID: 'Forgot password token is invalid',
+  AUTHORIZATION_INVALID: 'Authorization is invalid',
+  REFRESH_TOKEN_INVALID: 'Refresh token is invalid',
+  EMAIL_VERIFICATION_TOKEN_INVALID: 'Email verification token is invalid',
+  REFRESH_TOKEN_USED_OR_NOT_EXIST: 'Refresh token used or does not exist'
+} as const

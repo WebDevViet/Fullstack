@@ -1,25 +1,9 @@
-import type { UserId } from '~/global/types/common.ts'
-import type { Authorization } from '~/global/types/JWT.ts'
+import type { z } from 'zod'
 
-// type IsAny<T> = 0 extends 1 & T ? true : false | IsAny<T> extends true ? true : false
-
-export type ValidatedRequest<
-  ReqBody = undefined,
-  ReqParams = undefined,
-  ReqQuery = undefined,
-  ReqHeaders = undefined
-> = {
-  validationValues: {
-    body: ReqBody
-    params: ReqParams
-    query: ReqQuery
-    headers: ReqHeaders
-  }
+export type BaseSchemaType<T, U> = {
+  [K in Exclude<keyof T, keyof U>]: T[K] extends z.ZodType<any, any, any> ? z.infer<T[K]> : never
 }
 
-export type AuthenticatedRequest<
-  ReqBody = undefined,
-  ReqParams = undefined,
-  ReqQuery = undefined,
-  ReqHeaders = Authorization
-> = UserId & ValidatedRequest<ReqBody, ReqParams, ReqQuery, ReqHeaders & Authorization>
+export type SchemaTypes<T> = {
+  [K in keyof T]: T[K] extends z.ZodType<any, any, any> ? z.infer<T[K]> : never
+}

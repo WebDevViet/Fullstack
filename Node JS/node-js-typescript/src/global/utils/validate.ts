@@ -1,52 +1,46 @@
 import type { NextFunction, Request, Response } from 'express'
-import type { Joi } from 'express-joi-validations'
+import createHttpError from 'http-errors'
+import { JsonWebTokenError } from 'jsonwebtoken'
+import type { ParseParams, ZodTypeAny } from 'zod'
 
 type ReqPart = 'params' | 'query' | 'body' | 'headers'
-type AssignToReq = {
-  valueField: string
-  nameAssignment: string
-}
 
-class Validate {
-  validator = ({
-    validSchema,
-    reqPart,
-    options,
-    assignToReq
-  }: {
-    validSchema: Joi.Schema
-    reqPart: ReqPart
-    options?: Joi.ValidationOptions
-    assignToReq?: AssignToReq
-  }) => {
-    return async function (req: Request & { [key: string]: any }, _res: Response, next: NextFunction) {
+const validator =
+  (reqPart: ReqPart) =>
+  <T>(
+    schemaToValidate: ZodTypeAny,
+    funcMiddleware?: (arg: T, req: Request) => void | Promise<void>,
+    parseParams?: Partial<ParseParams>
+  ) =>
+    async function (req: Request, _res: Response, next: NextFunction) {
       try {
-        req.validationValues ??= {}
-        const resultValidate = await validSchema.validateAsync(req[reqPart], { abortEarly: false, ...options })
+        req[reqPart] = await schemaToValidate.parseAsync(req[reqPart], parseParams)
 
-        req.validationValues[reqPart] = resultValidate
+        if (funcMiddleware) await funcMiddleware(req[reqPart], req)
 
-        if (assignToReq) {
-          req[assignToReq.nameAssignment] = resultValidate[assignToReq.valueField]
-        }
         next()
-      } catch (error) {
+      } catch (error: any) {
+        // catch logic error
+        if (error instanceof createHttpError.HttpError) {
+          next(error)
+          return
+        }
+
+        // catch token error
+        if (error instanceof JsonWebTokenError) {
+          next(createHttpError.Unauthorized(error.message))
+          return
+        }
+
+        // catch zod error and other
         next(error)
       }
     }
-  }
 
-  validateAsyncParams = (validSchema: Joi.Schema, assignToReq?: AssignToReq, options?: Joi.ValidationOptions) =>
-    this.validator({ validSchema, reqPart: 'params', options, assignToReq })
+export const validateBody = validator('body')
 
-  validateAsyncQuery = (validSchema: Joi.Schema, assignToReq?: AssignToReq, options?: Joi.ValidationOptions) =>
-    this.validator({ validSchema, reqPart: 'query', options, assignToReq })
+export const validateQuery = validator('query')
 
-  validateAsyncBody = (validSchema: Joi.Schema, assignToReq?: AssignToReq, options?: Joi.ValidationOptions) =>
-    this.validator({ validSchema, reqPart: 'body', options, assignToReq })
+export const validateParams = validator('params')
 
-  validateAsyncHeaders = (validSchema: Joi.Schema, assignToReq?: AssignToReq, options?: Joi.ValidationOptions) =>
-    this.validator({ validSchema, reqPart: 'headers', options, assignToReq })
-}
-
-export const { validateAsyncParams, validateAsyncQuery, validateAsyncBody, validateAsyncHeaders } = new Validate()
+export const validateHeaders = validator('headers')

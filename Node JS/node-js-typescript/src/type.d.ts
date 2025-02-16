@@ -1,10 +1,18 @@
+import type { ObjectId } from 'mongodb'
+
 declare global {
+  namespace Express {
+    interface Request {
+      userId?: ObjectId
+    }
+  }
+
   namespace NodeJS {
     interface ProcessEnv {
       NODE_ENV: string
 
-      BASE_URL: string
       PORT: string
+      SERVER_URL: string
 
       DEFAULT_SECRET_KEY: string
 
@@ -30,6 +38,8 @@ declare global {
       GOOGLE_CLIENT_ID: string
       GOOGLE_CLIENT_SECRET: string
       GOOGLE_REDIRECT_URI: string
+      GOOGLE_OAUTH_TOKEN_URL: string
+      GOOGLE_OAUTH_USERINFO_URL: string
 
       CLIENT_OAUTH_LOGIN_URL: string
     }

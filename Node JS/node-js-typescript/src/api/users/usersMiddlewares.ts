@@ -1,46 +1,14 @@
-import { Joi, validateBody } from 'express-joi-validations'
-import createHttpError from 'http-errors'
-import type { ObjectId } from 'mongodb'
-import { validateAsyncBody, validateAsyncParams } from '~/global/utils/validate.ts'
-import { USERS_MESSAGES } from './constants/usersMessages.ts'
-import userValidation from './schemas/userValidation.ts'
-import usersServices from './usersServices.ts'
+import { validateBody, validateParams } from '~/global/utils/validate.ts'
+import UserSchemaValidations from './schemas/usersSchemaValidations.ts'
 
-class UsersValidate {
-  updateMyProfile = validateBody(
-    Joi.object({
-      name: userValidation.extract('name'),
-      dateOfBirth: userValidation.extract('dateOfBirth'),
-      username: userValidation.extract('username'),
-      bio: userValidation.extract('bio'),
-      location: userValidation.extract('location'),
-      website: userValidation.extract('website')
-    }).options({ abortEarly: false })
-  )
+class UsersMiddleware extends UserSchemaValidations {
+  userProfile = validateParams(this.userProfileSchema)
 
-  followUser = validateAsyncBody(
-    Joi.object({
-      followedUserId: userValidation.extract('id').external(async (id: ObjectId) => {
-        const user = await usersServices.getUserById(id)
-        if (!user) throw createHttpError.NotFound(USERS_MESSAGES.USER_TO_FOLLOW_NOT_FOUND)
-        return id
-      })
-    }).options({
-      abortEarly: false
-    })
-  )
+  updateMyProfile = validateBody(this.updateMyProfileSchema)
 
-  unfollowUser = validateAsyncParams(
-    Joi.object({
-      followedUserId: userValidation.extract('id').external(async (id: ObjectId) => {
-        const user = await usersServices.getUserById(id)
-        if (!user) throw createHttpError.NotFound(USERS_MESSAGES.USER_TO_UNFOLLOW_NOT_FOUND)
-        return id
-      })
-    }).options({
-      abortEarly: false
-    })
-  )
+  followUser = validateBody(this.followedUserIdSchema)
+
+  unfollowUser = validateParams(this.followedUserIdSchema)
 }
 
-export default new UsersValidate()
+export default new UsersMiddleware()

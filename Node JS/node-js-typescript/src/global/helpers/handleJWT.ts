@@ -1,13 +1,14 @@
 import jwt, { type SignOptions } from 'jsonwebtoken'
 import type { TokenPayload } from '../types/JWT.ts'
+import formatJWTMessage from './formatJWTMessage.ts'
 
 export const signToken = ({
   payload,
-  secretKey = process.env.DEFAULT_SECRET_KEY,
+  secretKey,
   options = {}
 }: {
   payload: string | object | Buffer
-  secretKey?: string
+  secretKey: string
   options?: SignOptions
 }) => {
   return new Promise<string>((resolve, reject) => {
@@ -20,14 +21,16 @@ export const signToken = ({
 
 export const verifyToken = <T extends TokenPayload>({
   token,
-  secretKey = process.env.DEFAULT_SECRET_KEY
+  secretKey,
+  label
 }: {
   token: string
-  secretKey?: string
+  secretKey: string
+  label: string
 }) => {
   return new Promise<T>((resolve, reject) => {
     jwt.verify(token, secretKey, (err, decoded) => {
-      if (err) reject(err)
+      if (err) reject(formatJWTMessage(err, label))
       resolve(decoded as T)
     })
   })

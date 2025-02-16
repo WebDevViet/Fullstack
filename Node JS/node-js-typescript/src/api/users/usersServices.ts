@@ -1,17 +1,13 @@
 import { camelCase, snakeCase } from 'change-case/keys'
+import createHttpError from 'http-errors'
 import { ObjectId, type Filter, type FindOneAndUpdateOptions, type FindOptions, type UpdateFilter } from 'mongodb'
 import mongoDB from '~/config/database/mongoDB.ts'
-import Follower from './schemas/followersSchemas.ts'
-import createHttpError from 'http-errors'
-import { AUTH_MESSAGES } from '../auth/constants/authMessages.ts'
-import type User from './schemas/usersSchemas.ts'
+import type { TSnakeCase } from '~/global/helpers/types/typeCase.ts'
 import { USERS_MESSAGES } from './constants/usersMessages.ts'
-import type {
-  MyProfileResult,
-  UpdateMyProfileBody,
-  UpdateMyProfileBodySnakeCase,
-  UserProfileResult
-} from './types/usersRequests.ts'
+import Follower from './schemas/followersSchemas.ts'
+import type User from './schemas/usersSchemas.ts'
+import type { UserSchemaTypes } from './schemas/usersSchemaValidations.ts'
+import type { MyProfileResult, UserProfileResult } from './types/usersReqRes.ts'
 
 const projection = { password: 0, email_verification_token: 0, forgot_password_token: 0 }
 
@@ -19,7 +15,7 @@ class UsersServices {
   async findOneUser(filter: Filter<User>, options?: Omit<FindOptions, 'timeoutMode'>): Promise<User> | never {
     const user = await mongoDB.users.findOne(filter, options)
 
-    if (!user) throw createHttpError.NotFound(AUTH_MESSAGES.USER_NOT_FOUND)
+    if (!user) throw createHttpError.NotFound(USERS_MESSAGES.USER_NOT_FOUND)
 
     return user
   }
@@ -31,7 +27,7 @@ class UsersServices {
   ): Promise<User> | never {
     const user = await mongoDB.users.findOneAndUpdate(filter, update, options ?? {})
 
-    if (!user) throw createHttpError.NotFound(AUTH_MESSAGES.USER_NOT_FOUND)
+    if (!user) throw createHttpError.NotFound(USERS_MESSAGES.USER_NOT_FOUND)
 
     return user
   }
@@ -43,6 +39,10 @@ class UsersServices {
 
   async getUserByEmail(email: string) {
     return await mongoDB.users.findOne({ email })
+  }
+
+  async getUserByUsername(username: string) {
+    return await mongoDB.users.findOne({ username })
   }
 
   async getUserProfile(username: string) {
@@ -59,11 +59,11 @@ class UsersServices {
     return camelCase(user) as MyProfileResult
   }
 
-  async updateMyProfile(userId: ObjectId, userPayload: UpdateMyProfileBody) {
+  async updateMyProfile(userId: ObjectId, userPayload: UserSchemaTypes['updateMyProfileSchema']) {
     const user = await this.findOneAndUpdateUser(
       { _id: userId },
       {
-        $set: snakeCase(userPayload) as UpdateMyProfileBodySnakeCase,
+        $set: snakeCase(userPayload) as TSnakeCase<UserSchemaTypes['updateMyProfileSchema']>,
         $currentDate: { updated_at: true }
       },
       { projection, returnDocument: 'after' }

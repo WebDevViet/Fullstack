@@ -1,42 +1,41 @@
 import type { Response } from 'express'
-import { USERS_MESSAGES } from './constants/usersMessages.ts'
 import type {
   followUserRequest,
   GetMyProfileRequest,
   GetUserProfileRequest,
   UnfollowUserRequest,
   UpdateMyProfileRequest
-} from './types/usersRequests.ts'
+} from './types/usersReqRes.ts'
 import usersServices from './usersServices.ts'
 
 const usersControllers = {
   getUserProfile: async (req: GetUserProfileRequest, res: Response) => {
     const user = await usersServices.getUserProfile(req.params.username)
 
-    res.json({ data: user, message: USERS_MESSAGES.GET_USER_SUCCESS })
+    res.json({ data: user, message: 'Get user successfully' })
   },
   getMyProfile: async (req: GetMyProfileRequest, res: Response) => {
     const user = await usersServices.getMyProfile(req.userId)
 
-    res.json({ data: user, message: USERS_MESSAGES.GET_PROFILE_SUCCESS })
+    res.json({ data: user, message: 'Get profile successfully' })
   },
 
   updateMyProfile: async (req: UpdateMyProfileRequest, res: Response) => {
-    const user = await usersServices.updateMyProfile(req.userId, req.validationValues.body)
+    const user = await usersServices.updateMyProfile(req.userId, req.body)
 
-    res.json({ data: user, message: USERS_MESSAGES.UPDATE_PROFILE_SUCCESS })
+    res.json({ data: user, message: 'Update profile successfully' })
   },
 
   followUser: async (req: followUserRequest, res: Response) => {
-    await usersServices.followUser(req.userId, req.validationValues.body.followedUserId)
+    await usersServices.followUser(req.userId, req.body.followedUserId)
 
-    res.json({ message: USERS_MESSAGES.FOLLOW_USER_SUCCESS })
+    res.json({ message: 'Follow user successfully' })
   },
 
   unfollowUser: async (req: UnfollowUserRequest, res: Response) => {
-    await usersServices.unfollowUser(req.userId, req.validationValues.params.followedUserId)
+    await usersServices.unfollowUser(req.userId, req.params.followedUserId)
 
-    res.json({ message: USERS_MESSAGES.UNFOLLOW_USER_SUCCESS })
+    res.json({ message: 'Unfollow user successfully' })
   }
 }
 

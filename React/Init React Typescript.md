@@ -50,8 +50,12 @@ _tsconfig.app.json_
     "noFallthroughCasesInSwitch": true,
 
     "baseUrl": "./src",
+    "paths": {
+      "~/*": ["src/*"],
+      "@/*": ["src/components/*"]
+    }
+  }
 }
-
 ```
 
 _vite.config.ts_

@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import { reqHandler } from '~/global/utils/reqHandler.ts'
-import authValidates from '../auth/authMiddlewares.ts'
+import authMiddlewares from '../auth/authMiddlewares.ts'
 import usersControllers from './usersControllers.ts'
-import usersValidates from './usersMiddlewares.ts'
+import usersMiddlewares from './usersMiddlewares.ts'
 
 const router = Router()
 
@@ -10,14 +10,14 @@ const router = Router()
  * @route GET /api/users/me
  * @header { Authorization: Bearer <token> }
  */
-router.get('/me', authValidates.accessToken, reqHandler(usersControllers.getMyProfile))
+router.get('/me', authMiddlewares.accessToken, reqHandler(usersControllers.getMyProfile))
 
 /** Update my profile
  * @route PATCH /api/users/me
  * @header { Authorization: Bearer <token> }
- * @body { 
-    name?: string, 
-    dateOfBirth?: date ISO8601, 
+ * @body {
+    name?: string,
+    dateOfBirth?: date ISO8601,
     username?: string
     bio?: string
     location?: string
@@ -26,8 +26,8 @@ router.get('/me', authValidates.accessToken, reqHandler(usersControllers.getMyPr
  */
 router.patch(
   '/me',
-  authValidates.verifiedUser,
-  usersValidates.updateMyProfile,
+  authMiddlewares.verifiedUser,
+  usersMiddlewares.updateMyProfile,
   reqHandler(usersControllers.updateMyProfile)
 )
 
@@ -35,7 +35,7 @@ router.patch(
  * @route GET /api/users/:username
  * @header { Authorization: Bearer <token> }
  */
-router.get('/:username', reqHandler(usersControllers.getUserProfile))
+router.get('/:username', usersMiddlewares.userProfile, reqHandler(usersControllers.getUserProfile))
 
 /** Follow user
  * @route POST /api/users/follow-user
@@ -44,19 +44,19 @@ router.get('/:username', reqHandler(usersControllers.getUserProfile))
  */
 router.post(
   '/follow-user',
-  authValidates.verifiedUser,
-  usersValidates.followUser,
+  authMiddlewares.verifiedUser,
+  usersMiddlewares.followUser,
   reqHandler(usersControllers.followUser)
 )
 
 /** Unfollow user
- * @route POST /api/users/unfollow-user/:followedUserId
+ * @route DELETE /api/users/unfollow-user/:followedUserId
  * @header { Authorization: Bearer <token> }
  */
 router.delete(
   '/unfollow-user/:followedUserId',
-  authValidates.verifiedUser,
-  usersValidates.unfollowUser,
+  authMiddlewares.verifiedUser,
+  usersMiddlewares.unfollowUser,
   reqHandler(usersControllers.unfollowUser)
 )
 
