@@ -49,10 +49,10 @@ _tsconfig.app.json_
     //...
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["src/components/*"]
+      "~/*": ["*"],
+      "@/*": ["components/*"]
     }
   }
 }
