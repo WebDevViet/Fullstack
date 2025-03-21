@@ -233,7 +233,7 @@ _.husky/pre-commit_
 # .husky/pre-commit
 
 bunx lint-staged
-bun run check-format,
+bun run check-format
 eslint --cache --max-warnings=0 .
 ```
 
@@ -267,7 +267,7 @@ _.gitignore_
 _bash(window)_
 
 ```bash
-bun add --save-dev @commitlint/config-conventional @commitlint/cli
+bun add -D @commitlint/config-conventional @commitlint/cli
 ```
 
 ```bash
