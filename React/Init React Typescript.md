@@ -23,10 +23,10 @@ _tsconfig.app.json_
 ```json
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2015"
     //...other config
+  }
 }
-
 ```
 
 > [!NOTE]
@@ -167,8 +167,8 @@ _package.json_
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check \"src/**/(*.tsx|*.ts|*.css|*.scss)\"",
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\"",
-    "check-format": "npm run lint && npm run prettier",
-    "fix-format": "npm run lint:fix && npm run prettier:fix"
+    "check:format": "npm run lint && npm run prettier",
+    "fix:format": "npm run lint:fix && npm run prettier:fix"
   }
 }
 ```
@@ -190,11 +190,11 @@ bun prettier:fix
 ```
 
 ```bash
-bun check-format
+bun check:format
 ```
 
 ```bash
-bun fix-format
+bun fix:format
 ```
 
 > [!TIP]
@@ -233,7 +233,7 @@ _.husky/pre-commit_
 # .husky/pre-commit
 
 bunx lint-staged
-bun run check-format,
+bun run check:format
 eslint --cache --max-warnings=0 .
 ```
 
@@ -246,7 +246,7 @@ _package.json_
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["npm run fix-format", "git add ."]
+    "*.{js,jsx,ts,tsx}": ["npm run fix:format", "git add ."]
   }
   //...
 }
@@ -267,7 +267,7 @@ _.gitignore_
 _bash(window)_
 
 ```bash
-bun add --save-dev @commitlint/config-conventional @commitlint/cli
+bun add -D @commitlint/config-conventional @commitlint/cli
 ```
 
 ```bash
