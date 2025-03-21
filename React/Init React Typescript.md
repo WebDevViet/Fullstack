@@ -233,7 +233,7 @@ _.husky/pre-commit_
 # .husky/pre-commit
 
 bunx lint-staged
-bun run check:format
+bun run check-format,
 eslint --cache --max-warnings=0 .
 ```
 
