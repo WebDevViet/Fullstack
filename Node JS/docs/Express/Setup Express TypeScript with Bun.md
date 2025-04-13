@@ -277,7 +277,7 @@ indent_style = space
 
 ## Giải thích cấu hình `tsconfig.json`
 
-File `tsconfig.json` này giống như một "bản hướng dẫn" mà bạn đưa cho TypeScript, bảo nó: "Này, hãy biên dịch code của tôi theo cách này nhé!". Nó giúp TypeScript hiểu dự án của bạn, từ cách viết code đến cách xuất file ra sao. Với một dự án Express Node.js, đây là cách mình giải thích từng phần trong config của bạn:
+File `tsconfig.json` này giống như một "bản hướng dẫn" mà bạn đưa cho TypeScript, bảo nó: "Này, hãy biên dịch code của tôi theo cách này nhé!". Nó giúp TypeScript hiểu dự án của bạn, từ cách viết code đến cách xuất file ra sao.
 
 ### 1. `"compilerOptions"` – Bộ điều khiển chính của TypeScript
 
@@ -384,7 +384,7 @@ Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra
 
 ---
 
-### Cấu hình `tsconfig.json` của dự án Next.js
+**Cấu hình `tsconfig.json` của dự án Next.js**
 
 ```json
 {
@@ -445,23 +445,21 @@ Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra
 
 ---
 
-## 2. Cấu hình ngoài `compilerOptions`
+### 2. Cấu hình ngoài `compilerOptions`
 
-### `"exclude": ["node_modules"]`
+#### `"exclude": ["node_modules"]`
 
 - **Nó là gì?**: Chỉ định TypeScript bỏ qua việc biên dịch các file hoặc thư mục được liệt kê.
 - **Dễ hiểu hơn**: "Đừng đụng vào `node_modules`, ở đó không phải việc của tôi."
 - **Ví dụ**: TypeScript sẽ không kiểm tra hay biên dịch hàng tá file trong `node_modules`, giúp quá trình biên dịch nhẹ nhàng hơn.
 
-### `"files": ["src/type.d.ts"]`
+#### `"files": ["src/type.d.ts"]`
 
 - **Nó là gì?**: Chỉ định file cụ thể mà TypeScript sẽ biên dịch.
 - **Dễ hiểu hơn**: "Tôi muốn TypeScript nhìn vào file `src/type.d.ts`."
 - **Ví dụ**: Dùng để khai báo kiểu dữ liệu đặc biệt, nhưng thường ta sẽ dùng `include` để bao quát hơn.
 
----
-
-### `"include": ["src/**/*"]`
+#### `"include": ["src/**/*"]`
 
 - **Nó là gì?**: Quy định những file nào sẽ được TypeScript xử lý.
 - **Dễ hiểu hơn**: "Hãy biên dịch hết mọi thứ trong thư mục `src` và các thư mục con của nó."
@@ -469,11 +467,11 @@ Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra
 
 ---
 
-## `"noUncheckedIndexedAccess": true` và `"noPropertyAccessFromIndexSignature": true` khác gì nhau
+### 3. `"noUncheckedIndexedAccess": true` và `"noPropertyAccessFromIndexSignature": true` khác gì nhau
 
 Để trả lời câu hỏi về sự khác biệt giữa `"noUncheckedIndexedAccess": true` và `"noPropertyAccessFromIndexSignature": true` trong TypeScript, chúng ta sẽ xem xét từng cấu hình và cách chúng ảnh hưởng đến việc truy cập thuộc tính trong các đối tượng có index signature.
 
-### `"noUncheckedIndexedAccess": true` là gì?
+#### `"noUncheckedIndexedAccess": true` là gì?
 
 - **Ý nghĩa**: Khi bật tùy chọn này trong TypeScript, việc truy cập một thuộc tính thông qua index signature sẽ luôn được coi là có thể trả về `undefined`. Điều này áp dụng ngay cả khi bạn không chắc chắn liệu thuộc tính đó có thực sự tồn tại trong đối tượng hay không.
 
@@ -497,7 +495,7 @@ Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra
   }
   ```
 
-### `"noPropertyAccessFromIndexSignature": true` là gì?
+#### `"noPropertyAccessFromIndexSignature": true` là gì?
 
 - **Ý nghĩa**: Tùy chọn này nghiêm ngặt hơn về mặt cú pháp. Nó cấm bạn sử dụng cú pháp obj.prop để truy cập các thuộc tính không được khai báo rõ ràng trong kiểu dữ liệu (tức là các thuộc tính chỉ tồn tại qua index signature). Thay vào đó, bạn phải dùng cú pháp obj["prop"].
 
@@ -524,7 +522,7 @@ Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra
 
 ---
 
-## Sự khác biệt chính
+#### Sự khác biệt chính
 
 Dưới đây là bảng so sánh để làm rõ sự khác biệt giữa hai cấu hình này trong TypeScript:
 
@@ -547,7 +545,7 @@ Dưới đây là bảng so sánh để làm rõ sự khác biệt giữa hai c�
 
 ---
 
-### Khi nào nên dùng cái nào?
+#### Khi nào nên dùng cái nào?
 
 - `Dùng "noUncheckedIndexedAccess": true`: Nếu bạn muốn code an toàn hơn bằng cách luôn kiểm tra các giá trị có thể là `undefined` khi truy cập thuộc tính qua index signature.
 
@@ -555,7 +553,7 @@ Dưới đây là bảng so sánh để làm rõ sự khác biệt giữa hai c�
 
 Bạn cũng có thể bật cả hai tùy chọn cùng lúc để tăng cường độ an toàn và rõ ràng, nhưng điều này có thể khiến việc viết code phức tạp hơn một chút.
 
-## Tóm lại
+### Tóm lại
 
 File `tsconfig.json` này giống như một người bạn nghiêm khắc nhưng tốt bụng: nó giúp bạn viết code TypeScript hiện đại, an toàn, và dễ bảo trì cho dự án Express Node.js. Nó:
 
