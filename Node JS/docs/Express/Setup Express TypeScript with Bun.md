@@ -122,20 +122,25 @@ bun add prettier eslint-config-prettier eslint-plugin-prettier tsx tsc-alias rim
 ```json
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
-    "target": "ES2023",
-    "module": "ES2022",
+    // Environment setup & latest features
+    "lib": ["esnext"],
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleDetection": "force",
     "allowJs": false,
 
+    // Bundler mode
     "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
     "noEmit": false,
 
+    // Best practices
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
 
+    // Some stricter flags (disabled by default)
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -350,11 +355,14 @@ Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra
 - **Dễ hiểu hơn**: "Nếu tôi khai báo gì mà không xài, hãy nhắc tôi dọn dẹp."
 - **Ví dụ**: `let x = 5` mà không dùng `x` sẽ bị báo lỗi.
 
-#### `"noPropertyAccessFromIndexSignature": true`
+#### `"noPropertyAccessFromIndexSignature": true` và `"noUncheckedIndexedAccess": true`
 
 - **Nó là gì?**: Ngăn bạn truy cập thuộc tính không rõ ràng từ một object.
 - **Dễ hiểu hơn**: "Đừng để tôi gọi nhầm thứ không tồn tại, bắt lỗi tôi đi."
 - **Ví dụ**: Nếu bạn gọi `obj.randomProp` mà `randomProp` không được định nghĩa, TypeScript sẽ báo.
+
+> [!TIP]
+> Phía dưới cùng mình sẽ giải thích thêm sự khác nhau của giữa 2 config nhé
 
 #### `"outDir": "dist"`
 
@@ -376,21 +384,176 @@ Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra
 
 ---
 
-### 2. `"files": ["src/type.d.ts"]`
+### Cấu hình `tsconfig.json` của dự án Next.js
+
+```json
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "exclude": ["node_modules"]
+}
+```
+
+#### `"resolveJsonModule": true`
+
+- **Nó là gì?**: Cho phép TypeScript import và xử lý các file JSON như một module bình thường.
+- **Dễ hiểu hơn**: "Tôi muốn lấy dữ liệu từ file JSON dễ dàng như khi import một file code vậy."
+- **Ví dụ**: Bạn có thể viết `import data from './data.json';` và TypeScript sẽ hiểu `data` là một object chứa nội dung của file JSON đó.
+
+#### `"isolatedModules": true`
+
+- **Nó là gì?**: Yêu cầu TypeScript coi mỗi file là một module độc lập, không dựa vào các file khác khi biên dịch.
+- **Dễ hiểu hơn**: "Hãy để mỗi file tự sống cuộc đời riêng của nó, đừng phức tạp hóa mọi thứ."
+- **Ví dụ**: Điều này hữu ích khi Next.js dùng Babel để biên dịch code, giúp quá trình nhanh hơn và ít lỗi hơn.
+
+#### `"jsx": "preserve"`
+
+- **Nó là gì?**: Quy định TypeScript giữ nguyên mã JSX thay vì biến đổi nó.
+- **Dễ hiểu hơn**: "Cứ để JSX của tôi nguyên vẹn, tôi sẽ để Next.js hoặc React xử lý sau."
+- **Ví dụ**: Khi bạn viết `<div>Xin chào</div>`, TypeScript không can thiệp mà để nguyên cho công cụ khác xử lý cú pháp này.
+
+#### `"incremental": true`
+
+- **Nó là gì?**: Giúp TypeScript chỉ biên dịch lại những file đã thay đổi thay vì toàn bộ dự án.
+- **Dễ hiểu hơn**: "Hãy nhớ lần trước tôi làm gì để lần này làm nhanh hơn nhé."
+- **Ví dụ**: Nếu bạn chỉ chỉnh sửa một file, TypeScript sẽ không mất công biên dịch lại tất cả, tiết kiệm thời gian.
+
+#### `"lib": ["dom", "dom.iterable", "esnext"]`
+
+- **Nó là gì?**: Danh sách các thư viện mà TypeScript sử dụng để hiểu các API của JavaScript và trình duyệt.
+- **Dễ hiểu hơn**: "Cho tôi dùng các tính năng của trình duyệt, các vòng lặp DOM, và cả JavaScript mới nhất."
+- **Ví dụ**:
+  - `document.querySelector` (từ `dom`).
+  - Dùng `for...of` với các phần tử DOM (từ `dom.iterable`).
+  - Viết `async/await` (từ `esnext`).
+
+#### `"plugins": [{ "name": "next" }]`
+
+- **Nó là gì?**: Kích hoạt plugin của Next.js để TypeScript hiểu và hỗ trợ tốt hơn các tính năng của framework này.
+- **Dễ hiểu hơn**: "Hãy thêm công cụ đặc biệt của Next.js để TypeScript làm việc ngon hơn với nó."
+- **Ví dụ**: Nhờ plugin này, TypeScript sẽ nhận diện được các hàm như `getServerSideProps` hay `getStaticProps` mà không báo lỗi.
+
+---
+
+## 2. Cấu hình ngoài `compilerOptions`
+
+### `"exclude": ["node_modules"]`
+
+- **Nó là gì?**: Chỉ định TypeScript bỏ qua việc biên dịch các file hoặc thư mục được liệt kê.
+- **Dễ hiểu hơn**: "Đừng đụng vào `node_modules`, ở đó không phải việc của tôi."
+- **Ví dụ**: TypeScript sẽ không kiểm tra hay biên dịch hàng tá file trong `node_modules`, giúp quá trình biên dịch nhẹ nhàng hơn.
+
+### `"files": ["src/type.d.ts"]`
 
 - **Nó là gì?**: Chỉ định file cụ thể mà TypeScript sẽ biên dịch.
-- **Dễ hiểu hơn**: "Tôi muốn TypeScript chỉ nhìn vào file `src/type.d.ts` này thôi."
+- **Dễ hiểu hơn**: "Tôi muốn TypeScript nhìn vào file `src/type.d.ts`."
 - **Ví dụ**: Dùng để khai báo kiểu dữ liệu đặc biệt, nhưng thường ta sẽ dùng `include` để bao quát hơn.
 
 ---
 
-### 3. `"include": ["src/**/*"]`
+### `"include": ["src/**/*"]`
 
 - **Nó là gì?**: Quy định những file nào sẽ được TypeScript xử lý.
 - **Dễ hiểu hơn**: "Hãy biên dịch hết mọi thứ trong thư mục `src` và các thư mục con của nó."
 - **Ví dụ**: Tất cả file `.ts` trong `src` sẽ được xử lý.
 
 ---
+
+## `"noUncheckedIndexedAccess": true` và `"noPropertyAccessFromIndexSignature": true` khác gì nhau
+
+Để trả lời câu hỏi về sự khác biệt giữa `"noUncheckedIndexedAccess": true` và `"noPropertyAccessFromIndexSignature": true` trong TypeScript, chúng ta sẽ xem xét từng cấu hình và cách chúng ảnh hưởng đến việc truy cập thuộc tính trong các đối tượng có index signature.
+
+### `"noUncheckedIndexedAccess": true` là gì?
+
+- **Ý nghĩa**: Khi bật tùy chọn này trong TypeScript, việc truy cập một thuộc tính thông qua index signature sẽ luôn được coi là có thể trả về `undefined`. Điều này áp dụng ngay cả khi bạn không chắc chắn liệu thuộc tính đó có thực sự tồn tại trong đối tượng hay không.
+
+- **Ảnh hưởng**: TypeScript sẽ yêu cầu bạn kiểm tra giá trị của thuộc tính trước khi sử dụng, để đảm bảo rằng nó không phải là `undefined`. Tuy nhiên, bạn vẫn có thể dùng cú pháp `obj.prop` để truy cập.
+
+- **Ví dụ**:
+
+  ```typescript
+  interface User {
+    [key: string]: string
+  }
+  const user: User = { name: 'Alice' }
+  const age = user.age // Lỗi: TypeScript coi age có thể là undefined
+  ```
+
+  Để tránh lỗi, bạn cần kiểm tra như sau:
+
+  ```typescript
+  if (user.age !== undefined) {
+    console.log(user.age) // An toàn
+  }
+  ```
+
+### `"noPropertyAccessFromIndexSignature": true` là gì?
+
+- **Ý nghĩa**: Tùy chọn này nghiêm ngặt hơn về mặt cú pháp. Nó cấm bạn sử dụng cú pháp obj.prop để truy cập các thuộc tính không được khai báo rõ ràng trong kiểu dữ liệu (tức là các thuộc tính chỉ tồn tại qua index signature). Thay vào đó, bạn phải dùng cú pháp obj["prop"].
+
+- **Ảnh hưởng**: Điều này giúp bạn nhận ra rằng bạn đang truy cập một thuộc tính động (dynamic property) và cần cẩn thận hơn. Tuy nhiên, nó không tự động yêu cầu kiểm tra undefined trừ khi kết hợp với các tùy chọn khác.
+
+- **Ví dụ**:
+
+  ```typescript
+  interface User {
+    [key: string]: string
+  }
+  const user: User = { name: 'Alice' }
+  const age = user.age // Lỗi: Không được phép dùng cú pháp này
+  ```
+
+  Cách đúng là:
+
+  ```typescript
+  const age = user['age'] // chỉ được phép truy cập kiểu này
+  if (age !== undefined) {
+    console.log(age) // Vẫn cần kiểm tra nếu muốn an toàn
+  }
+  ```
+
+---
+
+## Sự khác biệt chính
+
+Dưới đây là bảng so sánh để làm rõ sự khác biệt giữa hai cấu hình này trong TypeScript:
+
+| **Tùy chọn**                                 | **Tập trung vào**     | **Cú pháp cho phép**          | **Yêu cầu kiểm tra `undefined`**      |
+| -------------------------------------------- | --------------------- | ----------------------------- | ------------------------------------- |
+| `"noUncheckedIndexedAccess": true`           | Giá trị (`undefined`) | `obj.prop` hoặc `obj["prop"]` | Có                                    |
+| `"noPropertyAccessFromIndexSignature": true` | Cú pháp truy cập      | Chỉ `obj["prop"]`             | Không (trừ khi kết hợp tùy chọn khác) |
+
+- `"noUncheckedIndexedAccess": true:`
+
+  - Quan tâm đến giá trị: Đảm bảo bạn không giả định một thuộc tính luôn tồn tại và có giá trị.
+
+  - Cho phép cả hai cú pháp (`obj.prop` và `obj["prop"]`), nhưng bắt buộc kiểm tra `undefined`.
+
+- `"noPropertyAccessFromIndexSignature": true:`
+
+  - Quan tâm đến cú pháp: Ngăn bạn dùng `obj.prop` cho các thuộc tính động, buộc dùng `obj["prop"]`.
+
+  - Không tự động yêu cầu kiểm tra `undefined`, nhưng điều này vẫn là tốt để thực hiện.
+
+---
+
+### Khi nào nên dùng cái nào?
+
+- `Dùng "noUncheckedIndexedAccess": true`: Nếu bạn muốn code an toàn hơn bằng cách luôn kiểm tra các giá trị có thể là `undefined` khi truy cập thuộc tính qua index signature.
+
+- Dùng `"noPropertyAccessFromIndexSignature": true`: Nếu bạn muốn code rõ ràng hơn, phân biệt giữa thuộc tính tĩnh (được khai báo rõ ràng) và thuộc tính động (qua index signature).
+
+Bạn cũng có thể bật cả hai tùy chọn cùng lúc để tăng cường độ an toàn và rõ ràng, nhưng điều này có thể khiến việc viết code phức tạp hơn một chút.
 
 ## Tóm lại
 
@@ -402,4 +565,11 @@ File `tsconfig.json` này giống như một người bạn nghiêm khắc nhưn
 - Làm việc với module kiểu mới (`import/export`).
 - Giúp bạn import dễ hơn với alias `~`.
 
-Hy vọng giải thích này giúp bạn hiểu rõ hơn và tự tin bắt đầu với TypeScript nhé! Nếu cần hỏi thêm, cứ thoải mái nha!
+Với config của nextjs thì:
+
+- Import file JSON một cách dễ dàng.
+- Biên dịch nhanh hơn nhờ `incremental` và `isolatedModules`.
+- Giữ nguyên mã JSX để Next.js xử lý.
+- Sử dụng các tính năng hiện đại của JavaScript và trình duyệt qua `lib`.
+- Tích hợp mượt mà với Next.js nhờ plugin `"next"`.
+- Loại bỏ việc biên dịch không cần thiết trong `node_modules`.
