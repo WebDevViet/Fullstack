@@ -4,8 +4,11 @@ import chalk from 'chalk'
 import { connectionMongo } from './config.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+
+// * Sử dụng https
 // import https from 'https'
 // import fs from 'fs'
+
 import http from 'http'
 import session from 'express-session'
 import flash from 'connect-flash'
@@ -36,9 +39,11 @@ app.use(flash())
 app.use(router)
 ;(async () => {
   await connectionMongo()
+  // * Sử dụng https
   // https
   http
     .createServer(
+      // * config for https
       // {
       //   key: fs.readFileSync('./localhost-key.pem'),
       //   cert: fs.readFileSync('./localhost.pem')

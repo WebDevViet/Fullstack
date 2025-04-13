@@ -19,7 +19,7 @@ bun lint
 ```
 
 ```bash
-bun lint:fix
+bun lint-fix
 ```
 
 ```bash
@@ -27,7 +27,7 @@ bun prettier
 ```
 
 ```bash
-bun prettier:fix
+bun prettier-fix
 ```
 
 ```bash
@@ -122,38 +122,33 @@ bun add prettier eslint-config-prettier eslint-plugin-prettier tsx tsc-alias rim
 ```json
 {
   "compilerOptions": {
-    // Enable latest features
     "lib": ["ESNext"],
     "target": "ES2023",
-    "module": "NodeNext",
+    "module": "ES2022",
     "moduleDetection": "force",
-    "allowJs": false, // Không cho phép sử dụng file JavaScript, chỉ sử dụng TypeScript
+    "allowJs": false,
 
-    // Bundler mode
-    "moduleResolution": "nodenext", // Sử dụng chế độ giải quyết module của Node.js
-    "allowImportingTsExtensions": true, // Cho phép nhập khẩu các file .ts
-    "verbatimModuleSyntax": true, // Giữ nguyên cú pháp module khi biên dịch
-    "noEmit": true, // Không tạo ra file đầu ra, chỉ kiểm tra lỗi
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "noEmit": false,
 
-    // Best practices
-    "strict": true, // Bật tất cả các kiểm tra nghiêm ngặt
-    "skipLibCheck": true, // Bỏ qua kiểm tra các file định nghĩa thư viện
-    "noFallthroughCasesInSwitch": true, // Ngăn chặn trường hợp rơi xuống trong switch
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
 
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": true, // Báo lỗi nếu có biến cục bộ không sử dụng
-    "noUnusedParameters": true, // Báo lỗi nếu có tham số không sử dụng trong hàm
-    "noPropertyAccessFromIndexSignature": true, // Ngăn chặn truy cập thuộc tính từ chỉ số không xác định
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
 
-    "outDir": "dist", // Đường dẫn output cho thư mục build
+    "outDir": "dist",
     "esModuleInterop": true,
-    "baseUrl": ".", // Đường dẫn base cho các import
+    "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"] // Đường dẫn tương đối cho các import (alias)
+      "@/*": ["src/*"]
     }
   },
-  "files": ["src/type.d.ts"], // Các file dùng để defined global type cho dự án
-  "include": ["src/**/*"] // Đường dẫn include cho các file cần build
+  "files": ["src/type.d.ts"],
+  "include": ["src/**/*"]
 }
 ```
 
@@ -260,53 +255,151 @@ indent_style = space
 ```json
 {
   "scripts": {
-    "dev": "bun --watch run index.ts",
+    "dev": "bun --watch run ./src/app.ts",
     "build": "rimraf ./dist && tsc && tsc-alias",
-    "start": "bun dist/index.js",
+    "start": "bun dist/app.js",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint-fix": "eslint . --fix",
     "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write .",
+    "prettier-fix": "prettier --write .",
     "check-format": "bun lint && bun prettier",
-    "fix-format": "bun lint:fix && bun prettier:fix"
+    "fix-format": "bun lint-fix && bun prettier-fix",
   },
   "devDependencies": ...
 }
 
 ```
 
-### Giải thích cấu hình tsconfig.json:
+## Giải thích cấu hình `tsconfig.json`
 
-1. **lib**: Xác định các thư viện mà TypeScript sẽ sử dụng. Ở đây, `ESNext` cho phép sử dụng các tính năng mới nhất của ECMAScript.
+File `tsconfig.json` này giống như một "bản hướng dẫn" mà bạn đưa cho TypeScript, bảo nó: "Này, hãy biên dịch code của tôi theo cách này nhé!". Nó giúp TypeScript hiểu dự án của bạn, từ cách viết code đến cách xuất file ra sao. Với một dự án Express Node.js, đây là cách mình giải thích từng phần trong config của bạn:
 
-2. **target**: Xác định phiên bản ECMAScript mà bạn muốn biên dịch.
+### 1. `"compilerOptions"` – Bộ điều khiển chính của TypeScript
 
-3. **module**: Xác định kiểu module. `NodeNext` cho phép sử dụng cú pháp import/export mới nhất.
+Phần này giống như bảng điều khiển trung tâm, nơi bạn đặt ra các quy tắc để TypeScript xử lý code.
 
-4. **moduleDetection**: `force` cho phép TypeScript nhận diện module ngay cả khi không có file `package.json`.
+#### `"lib": ["ESNext"]`
 
-5. **jsx**: Tùy chọn này chỉ cần thiết nếu bạn đang sử dụng React. Nếu không, bạn có thể bỏ qua nó.
+- **Nó là gì?**: Đây là danh sách các "hộp công cụ" JavaScript mà TypeScript sẽ dùng. `"ESNext"` nghĩa là dùng tất cả các tính năng mới nhất của JavaScript.
+- **Dễ hiểu hơn**: Giống như bạn nói với TypeScript: "Cho tôi dùng toàn bộ đồ chơi xịn nhất của JavaScript, như `async/await` hay `Promise`, mà không cần cài thêm gì cả".
+- **Ví dụ**: Bạn có thể viết `await fetchData()` mà không lo TypeScript kêu ca.
 
-6. **allowJs**: Nếu bạn không cần sử dụng file JavaScript, bạn có thể đặt giá trị này là `false`.
+#### `"target": "ESNext"`
 
-7. **moduleResolution**: `nodenext` cho phép TypeScript sử dụng cách giải quyết module giống như Node.js.
+- **Nó là gì?**: Quyết định phiên bản JavaScript mà code của bạn sẽ biến thành sau khi biên dịch. `"ESNext"` là phiên bản mới nhất.
+- **Dễ hiểu hơn**: "Tôi muốn code của mình sau khi biên dịch vẫn là JavaScript hiện đại nhất, để tận dụng hết các tính năng mới."
+- **Ví dụ**: Code của bạn sẽ chạy được trên Node.js phiên bản mới mà không bị lỗi cú pháp cũ.
 
-8. **allowImportingTsExtensions**: Cho phép nhập khẩu các file TypeScript với phần mở rộng `.ts`.
+#### `"module": "ESNext"`
 
-9. **verbatimModuleSyntax**: Giữ nguyên cú pháp module khi biên dịch, giúp duy trì cú pháp ES Module.
+- **Nó là gì?**: Quy định cách bạn tổ chức code thành các "module" (khối code có thể tái sử dụng). `"ESNext"` dùng chuẩn module mới nhất.
+- **Dễ hiểu hơn**: "Tôi muốn dùng `import` và `export` kiểu hiện đại để chia sẻ code giữa các file."
+- **Ví dụ**: Bạn có thể viết `import express from 'express'` thay vì cách cũ như `require`.
 
-10. **noEmit**: Không tạo ra file đầu ra, chỉ kiểm tra lỗi trong mã nguồn.
+#### `"moduleDetection": "force"`
 
-11. **strict**: Bật tất cả các kiểm tra nghiêm ngặt, giúp phát hiện lỗi sớm hơn.
+- **Nó là gì?**: Buộc TypeScript luôn nhìn các file của bạn như module.
+- **Dễ hiểu hơn**: "Đừng đoán lung tung, cứ coi mọi file của tôi là module đi cho chắc."
+- **Ví dụ**: Đảm bảo TypeScript không nhầm lẫn khi bạn quên khai báo module.
 
-12. **skipLibCheck**: Bỏ qua kiểm tra các file định nghĩa thư viện, giúp tăng tốc độ biên dịch.
+#### `"allowJs": false`
 
-13. **noFallthroughCasesInSwitch**: Ngăn chặn trường hợp rơi xuống trong cấu trúc switch, giúp tránh lỗi logic.
+- **Nó là gì?**: Không cho phép TypeScript biên dịch file JavaScript, chỉ làm việc với file TypeScript.
+- **Dễ hiểu hơn**: "Tôi chỉ muốn dùng TypeScript thôi, đừng đụng đến file `.js` cũ của tôi."
+- **Ví dụ**: Nếu bạn có file `script.js`, nó sẽ bị bỏ qua.
 
-14. **noUnusedLocals**: Báo lỗi nếu có biến cục bộ không sử dụng, giúp giữ mã nguồn sạch sẽ.
+#### `"moduleResolution": "bundler"`
 
-15. **noUnusedParameters**: Báo lỗi nếu có tham số không sử dụng trong hàm, giúp phát hiện mã thừa.
+- **Nó là gì?**: Quy định cách TypeScript tìm các module. `"bundler"` phù hợp với các công cụ như Webpack.
+- **Dễ hiểu hơn**: "Hãy tìm module theo cách mà các công cụ đóng gói code hay dùng."
+- **Ví dụ**: Giúp TypeScript hiểu cách Express được import đúng cách.
 
-16. **noPropertyAccessFromIndexSignature**: Ngăn chặn truy cập thuộc tính từ chỉ số không xác định, giúp bảo vệ mã nguồn.
+#### `"verbatimModuleSyntax": false`
 
-Cấu hình này sẽ giúp bạn phát triển ứng dụng Express với TypeScript một cách hiệu quả và an toàn hơn.
+- **Nó là gì?**: Cho phép TypeScript linh hoạt hơn với cú pháp module.
+- **Dễ hiểu hơn**: "Đừng quá khắt khe với cách tôi viết `import`, cứ linh hoạt đi."
+- **Ví dụ**: Bạn có thể dùng kiểu import hơi "lạ" mà vẫn không bị lỗi.
+
+#### `"noEmit": false`
+
+- **Nó là gì?**: Cho phép TypeScript xuất file `.js` sau khi biên dịch.
+- **Dễ hiểu hơn**: "Sau khi xong, hãy tạo file JavaScript cho tôi dùng nhé."
+- **Ví dụ**: File `app.ts` sẽ thành `app.js` trong thư mục `dist`.
+
+#### `"strict": true`
+
+- **Nó là gì?**: Bật chế độ "nghiêm khắc" để TypeScript kiểm tra code kỹ hơn.
+- **Dễ hiểu hơn**: "Hãy bắt lỗi tôi thật chặt chẽ để tôi không viết code bừa bãi."
+- **Ví dụ**: Nếu bạn quên khai báo kiểu dữ liệu, TypeScript sẽ la lên ngay.
+
+#### `"skipLibCheck": true`
+
+- **Nó là gì?**: Bỏ qua việc kiểm tra file định nghĩa của thư viện bên thứ ba.
+- **Dễ hiểu hơn**: "Đừng mất công kiểm tra mấy file của thư viện, cứ tin nó đi cho nhanh."
+- **Ví dụ**: Làm biên dịch nhanh hơn khi dùng Express hoặc các thư viện lớn.
+
+#### `"noFallthroughCasesInSwitch": true`
+
+- **Nó là gì?**: Đảm bảo mỗi nhánh trong `switch` phải kết thúc rõ ràng (bằng `break` hoặc `return`).
+- **Dễ hiểu hơn**: "Đừng để code tôi chạy lung tung trong `switch`, bắt lỗi nếu tôi quên `break`."
+- **Ví dụ**: Ngăn lỗi khi bạn quên kết thúc một nhánh.
+
+#### `"noUnusedLocals": true` và `"noUnusedParameters": true`
+
+- **Nó là gì?**: Báo lỗi nếu có biến hoặc tham số không dùng tới.
+- **Dễ hiểu hơn**: "Nếu tôi khai báo gì mà không xài, hãy nhắc tôi dọn dẹp."
+- **Ví dụ**: `let x = 5` mà không dùng `x` sẽ bị báo lỗi.
+
+#### `"noPropertyAccessFromIndexSignature": true`
+
+- **Nó là gì?**: Ngăn bạn truy cập thuộc tính không rõ ràng từ một object.
+- **Dễ hiểu hơn**: "Đừng để tôi gọi nhầm thứ không tồn tại, bắt lỗi tôi đi."
+- **Ví dụ**: Nếu bạn gọi `obj.randomProp` mà `randomProp` không được định nghĩa, TypeScript sẽ báo.
+
+#### `"outDir": "dist"`
+
+- **Nó là gì?**: Nơi lưu các file `.js` sau khi biên dịch.
+- **Dễ hiểu hơn**: "Đưa hết file JavaScript sau khi xong vào thư mục `dist` cho gọn."
+- **Ví dụ**: File `src/app.ts` sẽ thành `dist/app.js`.
+
+#### `"esModuleInterop": true`
+
+- **Nó là gì?**: Làm cho việc dùng module kiểu cũ (CommonJS) dễ hơn.
+- **Dễ hiểu hơn**: "Giúp tôi import mấy thư viện cũ một cách mượt mà."
+- **Ví dụ**: Bạn có thể dùng `import express from 'express'` dễ dàng.
+
+#### `"baseUrl": "."` và `"paths": { "@/*": ["src/*"] }`
+
+- **Nó là gì?**: Đặt đường dẫn gốc và tạo "biệt danh" cho module.
+- **Dễ hiểu hơn**: "Từ giờ, thay vì viết đường dẫn dài, tôi chỉ cần dùng `@` để trỏ vào `src`."
+- **Ví dụ**: `import { helper } from '@/utils'` thay vì `import { helper } from '../../utils'`.
+
+---
+
+### 2. `"files": ["src/type.d.ts"]`
+
+- **Nó là gì?**: Chỉ định file cụ thể mà TypeScript sẽ biên dịch.
+- **Dễ hiểu hơn**: "Tôi muốn TypeScript chỉ nhìn vào file `src/type.d.ts` này thôi."
+- **Ví dụ**: Dùng để khai báo kiểu dữ liệu đặc biệt, nhưng thường ta sẽ dùng `include` để bao quát hơn.
+
+---
+
+### 3. `"include": ["src/**/*"]`
+
+- **Nó là gì?**: Quy định những file nào sẽ được TypeScript xử lý.
+- **Dễ hiểu hơn**: "Hãy biên dịch hết mọi thứ trong thư mục `src` và các thư mục con của nó."
+- **Ví dụ**: Tất cả file `.ts` trong `src` sẽ được xử lý.
+
+---
+
+## Tóm lại
+
+File `tsconfig.json` này giống như một người bạn nghiêm khắc nhưng tốt bụng: nó giúp bạn viết code TypeScript hiện đại, an toàn, và dễ bảo trì cho dự án Express Node.js. Nó:
+
+- Dùng JavaScript mới nhất (`ESNext`).
+- Kiểm tra code chặt chẽ (`strict`).
+- Tạo file `.js` trong `dist` để bạn chạy bằng Node.js.
+- Làm việc với module kiểu mới (`import/export`).
+- Giúp bạn import dễ hơn với alias `~`.
+
+Hy vọng giải thích này giúp bạn hiểu rõ hơn và tự tin bắt đầu với TypeScript nhé! Nếu cần hỏi thêm, cứ thoải mái nha!
