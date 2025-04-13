@@ -571,3 +571,68 @@ Với config của nextjs thì:
 - Sử dụng các tính năng hiện đại của JavaScript và trình duyệt qua `lib`.
 - Tích hợp mượt mà với Next.js nhờ plugin `"next"`.
 - Loại bỏ việc biên dịch không cần thiết trong `node_modules`.
+
+---
+
+## Tạo cấu hình `tsc-alias`
+
+Để cấu hình `tsc-alias`, bạn cần thực hiện các bước sau:
+
+### 1. Cài đặt `tsc-alias` bằng cách chạy lệnh sau trong terminal:
+
+```
+npm install --save-dev tsc-alias
+```
+
+### 2. Tạo một file `paths.json` trong thư mục dự án của bạn, trong đó chứa các alias và đường dẫn đến các module tương ứng. Ví dụ:
+
+```json
+{
+  "@utils": ["src/utils"],
+  "@components": ["src/components"],
+  "@services": ["src/services"]
+}
+```
+
+### 3. Thêm một đoạn mã sau vào file `tsconfig.json` của bạn:
+
+```json
+{
+  "compilerOptions": {
+    // ...
+    "paths": {
+      "@utils/*": ["src/utils/*"],
+      "@components/*": ["src/components/*"],
+      "@services/*": ["src/services/*"]
+    }
+  }
+}
+```
+
+### 4. Chạy lệnh sau để tạo ra các alias:
+
+```
+npx tsc-alias
+```
+
+### 5. Sau khi chạy lệnh trên, bạn có thể sử dụng các alias trong mã nguồn TypeScript của mình.
+
+Lưu ý:
+
+- Bạn cần phải chạy lệnh `npx tsc-alias` mỗi khi bạn thay đổi file `paths.json` hoặc `tsconfig.json`.
+- Bạn có thể cấu hình `tsc-alias` để tự động chạy khi bạn chạy lệnh `tsc` bằng cách thêm đoạn mã sau vào file `tsconfig.json` của bạn:
+
+```json
+{
+  "compilerOptions": {
+    // ...
+    "plugins": [
+      {
+        "transform": "tsc-alias"
+      }
+    ]
+  }
+}
+```
+
+Sau đó, bạn có thể chạy lệnh `tsc` như bình thường, và `tsc-alias` sẽ tự động chạy để tạo ra các alias.
