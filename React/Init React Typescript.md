@@ -110,10 +110,16 @@ _.prettierrc_
 _.prettierignore_
 
 ```
+bun.lockb
+package-lock.json
+postcss.config.mjs
+tailwind.config.ts
+commitlint.config.js
 node_modules/
 dist/
-build/
-src/index.css
+public/
+.husky/
+.react-router/
 ```
 
 - Cài extensions-vscode: **ESlint, Prettier, Prettier ESlint**
