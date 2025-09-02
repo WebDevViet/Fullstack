@@ -1,22 +1,26 @@
-# Khởi tạo dự án React-Typescript với Bun Vite
+# Khởi tạo dự án React Router, Typescript, Bun
+
+```bash
+bunx create-react-router@latest my-react-router-app
+```
+
+## Cấu hình React Router
 
 _package.json_
 
 ```json
 {
   "scripts": {
-    "dev": "bunx --bun vite --open",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "lint": "eslint ."
+    "build": "react-router build",
+    "dev": "react-router dev --open",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc"
     //...
   }
 }
 ```
 
 ## Cấu hình Typescript
-
-### Target ES2015
 
 _tsconfig.app.json_
 
@@ -32,104 +36,60 @@ _tsconfig.app.json_
 > [!NOTE]
 > Vì web app cần được chạy ổn định ở nhiều phiên bản trình duyệt và các browser khác nhau nên ta cần target về ES6
 
-### Short import path
+## Cấu hình vite
 
-```bash
-bun add vite-tsconfig-paths -D
-```
+> [!IMPORTANT]
+> Nếu bạn mở devtool console trên chrome mà thấy terminal của bạn xuất hiện lỗi này: `Error: No route matches URL "/.well-known/appspecific/com.chrome.devtools.json"`, thì hãy làm các bước dưới đây
 
-_tsconfig.app.json_
+- Cài extension: **DevTools JSON**
 
-```json
-{
-  "compilerOptions": {
-    "target": "ES2015",
-    /* Bundler mode */
-    /* Linting */
-    //...
-    "noFallthroughCasesInSwitch": true,
+  ```bash
+  bun add -D vite-plugin-devtools-json
+  ```
 
-    "baseUrl": "src",
-    "paths": {
-      "~/*": ["*"],
-      "@/*": ["components/*"]
+- Cấu hình vite
+
+  _vite.config.ts_
+
+  ```typescript
+  import { reactRouter } from '@react-router/dev/vite'
+  import tailwindcss from '@tailwindcss/vite'
+  import { defineConfig } from 'vite'
+  import tsconfigPaths from 'vite-tsconfig-paths'
+  import devtoolsJson from 'vite-plugin-devtools-json'
+
+  export default defineConfig({
+    plugins: [tailwindcss(), reactRouter(), tsconfigPaths(), devtoolsJson()],
+    server: {
+      port: 3000
+    },
+    css: {
+      devSourcemap: true
     }
-  }
-}
+  })
+  ```
+
+## Thêm EditorConfig
+
+1. Cài extension EditorConfig for VS Code trên VS Code để đọc được file .editorconfig
+
+2. Tạo file .editorconfig với nội dung như sau ở thư mục root (ngang cấp với package.json)
+
+_.editorconfig_
+
 ```
-
-_vite.config.ts_
-
-```typescript
-import tsconfigPaths from 'vite-tsconfig-paths'
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
-  server: {
-    port: 3000
-  },
-  css: {
-    devSourcemap: true
-  }
-})
+[*]
+indent_style = space
+indent_size = 2
 ```
 
 ## ESLint - Prettier
 
 ```bash
-bun add prettier eslint-config-prettier eslint-plugin-prettier eslint-plugin-react -D
+bun add prettier -D
 ```
 
-_eslint.config.js_
-
-```javascript
-//...
-import eslintPluginPrettier from 'eslint-plugin-prettier'
-import react from 'eslint-plugin-react'
-
-export default tseslint.config(
-  { ignores: ['dist', 'vite.config.ts'] },
-  {
-    //...
-    plugins: {
-      //...
-      prettier: eslintPluginPrettier,
-      react
-    },
-    rules: {
-      //...
-      // Tắt rule yêu cầu import React trong file jsx
-      'react/react-in-jsx-scope': 'off',
-      // Cảnh báo khi thẻ <a target='_blank'> mà không có rel="noreferrer"
-      'react/jsx-no-target-blank': 'warn',
-      // Cảnh báo đang sử dụng debugger
-      'no-debugger': 'warn',
-      // Cảnh báo đang sử dụng console
-      'no-console': 'warn',
-      // Cảnh báo nếu xuống hàng nhiều hơn 1 dòng
-      'no-multiple-empty-lines': ['warn', { max: 1 }],
-      // Rules prettier
-      'prettier/prettier': [
-        'warn',
-        {
-          // Không sử dụng dấu chấm phẩy ở cuối dòng
-          semi: false,
-          // Sử dụng dấu nháy đơn cho chuỗi
-          singleQuote: true,
-          // Sử dụng dấu nháy đơn trong JSX
-          jsxSingleQuote: true,
-          // Không thêm dấu phẩy cuối cùng trong obj hoặc array
-          trailingComma: 'none',
-          // Giới hạn độ dài dòng là 120 ký tự
-          printWidth: 120,
-          // Sử dụng 2 khoảng trắng để thụt đầu dòng
-          tabWidth: 2
-        }
-      ]
-    }
-  }
-)
-```
+### Prettier
 
 - Tạo 2 file ở root: **.prettierrc** và **.prettierignore**
 
@@ -142,7 +102,8 @@ _.prettierrc_
   "jsxSingleQuote": true,
   "trailingComma": "none",
   "printWidth": 120,
-  "tabWidth": 2
+  "tabWidth": 2,
+  "endOfLine": "auto"
 }
 ```
 
@@ -157,6 +118,48 @@ src/index.css
 
 - Cài extensions-vscode: **ESlint, Prettier, Prettier ESlint**
 
+### ESLint
+
+_eslint.config.js_
+
+```javascript
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import { globalIgnores } from 'eslint/config'
+
+export default tseslint.config([
+  globalIgnores(['dist', 'build', '.react-router']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs['recommended-latest'],
+      reactRefresh.configs.vite
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser
+    },
+    rules: {
+      // Tắt rule chỉ cho phép export component
+      'react-refresh/only-export-components': 'off',
+      // Tắt rule không sử dụng biến
+      // 'no-empty-pattern': 'off',
+      // Cảnh báo đang sử dụng debugger
+      'no-debugger': 'warn',
+      // Cảnh báo đang sử dụng console
+      'no-console': 'warn',
+      // Cảnh báo nếu xuống hàng nhiều hơn 1 dòng
+      'no-multiple-empty-lines': ['warn', { max: 1 }]
+    }
+  }
+])
+```
+
 _package.json_
 
 ```json
@@ -164,11 +167,11 @@ _package.json_
   "scripts": {
     //...
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint-fix": "eslint . --fix",
     "prettier": "prettier --check \"src/**/(*.tsx|*.ts|*.css|*.scss)\"",
-    "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\"",
-    "check:format": "npm run lint && npm run prettier",
-    "fix:format": "npm run lint:fix && npm run prettier:fix"
+    "prettier-fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\"",
+    "check-format": "npm run lint && npm run prettier",
+    "fix-format": "npm run lint-fix && npm run prettier-fix"
   }
 }
 ```
@@ -178,7 +181,7 @@ bun lint
 ```
 
 ```bash
-bun lint:fix
+bun lint-fix
 ```
 
 ```bash
@@ -186,29 +189,19 @@ bun prettier
 ```
 
 ```bash
-bun prettier:fix
+bun prettier-fix
 ```
 
 ```bash
-bun check:format
+bun check-format
 ```
 
 ```bash
-bun fix:format
+bun fix-format
 ```
 
 > [!TIP]
-> Nếu ESLint không hoạt động ta thử tắt VSCode và mở lại + run dev
-
-## Editor Config
-
-- Tạo file ở root: **.editorconfig**
-
-```
-[*]
-indent_style = space
-indent_size = 2
-```
+> Nếu ESLint không hoạt động ta thử tắt VSCode và mở lại + bun dev
 
 ## Husky
 
@@ -233,7 +226,7 @@ _.husky/pre-commit_
 # .husky/pre-commit
 
 bunx lint-staged
-bun run check:format
+bun run check-format
 eslint --cache --max-warnings=0 .
 ```
 
@@ -246,16 +239,17 @@ _package.json_
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["npm run fix:format", "git add ."]
+    "*.{js,jsx,ts,tsx}": ["npm run fix-format", "git add ."]
   }
   //...
 }
 ```
 
+- Thêm .eslintcache vào file .gitignore
+
 _.gitignore_
 
 ```
-# thêm .eslintcache
 .eslintcache
 ```
 
@@ -264,10 +258,11 @@ _.gitignore_
 > [!NOTE]
 > CommitLint ta sẽ đảm bảo được tất cả các commit đều phải có nội dung theo chuẩn (thường sử dụng chuẩn commit của Angular)
 
-_bash(window)_
+> [!WARNING]
+> Những câu lệnh dưới đây dùng cho bash ko phải cho terminal cmd
 
 ```bash
-bun add -D @commitlint/config-conventional @commitlint/cli
+bun add -D @commitlint/cli @commitlint/config-conventional
 ```
 
 ```bash
