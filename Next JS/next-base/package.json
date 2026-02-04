@@ -6,7 +6,22 @@
     "dev": "bun --bun next dev",
     "build": "bun --bun next build",
     "start": "bun --bun next start",
-    "lint": "eslint"
+    "lint": "eslint src --cache",
+    "lint-fix": "eslint src --fix",
+    "prettier": "prettier --check \"src/**/*.{ts,tsx,css,scss}\"",
+    "prettier-fix": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
+    "check-format": "bun lint && bun prettier",
+    "fix-format": "bun lint-fix && bun prettier-fix",
+    "prepare": "husky",
+    "commitlint": "commitlint --edit"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --cache --fix --max-warnings=0"
+    ],
+    "*.{ts,tsx,js,jsx,css,scss}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "next": "16.1.6",
@@ -14,6 +29,8 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -21,6 +38,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.8.1",
     "tailwindcss": "^4",
     "typescript": "^5"

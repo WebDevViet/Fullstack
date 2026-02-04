@@ -200,17 +200,10 @@ bunx lint-staged
 _package.json_
 
 ```json
-{
-  "scripts": {
-    //...
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["eslint --cache --fix --max-warnings=0"],
-    "*.{ts,tsx,js,jsx,css,scss}": ["prettier --write"]
-  }
-  //...
-}
+"lint-staged": {
+  "*.{js,jsx,ts,tsx}": ["eslint --cache --fix --max-warnings=0"],
+  "*.{ts,tsx,js,jsx,css,scss}": ["prettier --write"]
+},
 ```
 
 - Thêm .eslintcache vào file .gitignore
@@ -232,7 +225,7 @@ CommitLint ta sẽ đảm bảo được tất cả các commit đều phải c�
 bun add -D @commitlint/cli @commitlint/config-conventional
 ```
 
-- Lệnh tạo file _commitlint.config.js_ với nội dung `export default { extends: ['@commitlint/config-conventional'] };`
+- Tạo file _commitlint.config.js_ kèm nội dung trong dấu "..."
 
 ```bash
 echo "export default { extends: ['@commitlint/config-conventional'] };" > commitlint.config.js
@@ -243,6 +236,8 @@ echo "export default { extends: ['@commitlint/config-conventional'] };" > commit
 ```bash
 npm pkg set scripts.commitlint="commitlint --edit"
 ```
+
+- Tạo file _commit-msg_
 
 ```bash
 echo "bun run commitlint \${1}" > .husky/commit-msg
