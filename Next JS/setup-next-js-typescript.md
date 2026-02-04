@@ -139,8 +139,8 @@ _package.json_
     //...
     "lint": "eslint src --cache",
     "lint-fix": "eslint src --fix",
-    "prettier": "prettier --check \"app/**/*.{ts,tsx,css,scss}\"",
-    "prettier-fix": "prettier --write \"app/**/*.{ts,tsx,css,scss}\"",
+    "prettier": "prettier --check \"src/**/*.{ts,tsx,css,scss}\"",
+    "prettier-fix": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
     "check-format": "bun lint && bun prettier",
     "fix-format": "bun lint-fix && bun prettier-fix"
   }
