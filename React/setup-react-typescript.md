@@ -3,7 +3,7 @@
 1. bun
 
 ```bash
-bunx --bun create-react-router@latest my-react-router-app
+bunx create-react-router@latest my-react-router-app
 ```
 
 > [!TIP]

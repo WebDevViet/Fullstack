@@ -271,3 +271,26 @@ git commit -m "feat: add new feature"
 ```bash
 git commit -m "fix(scope): fix bug"
 ```
+
+## UI
+
+### Shadcn
+
+1. [Install pkg](https://ui.shadcn.com/docs/installation/next)
+
+- [Base Color](https://ui.shadcn.com/colors)
+
+2. [Add dark mode](https://ui.shadcn.com/docs/dark-mode/next)
+
+3. [Cài các component mong muốn](https://ui.shadcn.com/docs/components)
+
+4. Bonus
+
+- Sonner(toast, ver "^2.0.7"): Muốn toast có màu(success/error/warn) thì thêm tham số `richColors: true` như sau:
+
+```ts
+toast.success(message, { ...configToast, richColors: true, id: message })
+```
+
+> [!WARNING]
+> Khi dùng toast trong sự kiện thì component phải dùng 'use client'
