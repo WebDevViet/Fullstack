@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    // Environment setup & latest features
+    "types": ["node"], // auto load type của Node.js khi dùng built-in, vd: process, Buffer, etc.
+    "lib": ["ESNext"], // quy định bộ API JavaScript mà TypeScript cho phép dùng để code (ES2020, ES2022…)
+    "target": "es2022", // phiên bản JS đầu ra sau khi TypeScript biên dịch
+    "module": "ESNext", //  quy định kiểu module output khi TypeScript biên dịch (ESM, CJS, UMD…)
+    "moduleDetection": "force", // buộc TS nhận diện file là module nếu có import/export
+
+    // Bundler mode
+    "noEmit": true, // không xuất file .js (dùng bundler để build)
+    "verbatimModuleSyntax": true, // tuân thủ chuẩn import/export, nếu là type thì phải là import type {...} from '...'
+    "allowImportingTsExtensions": true, // cho phép import file với đuôi mở rộng vd: import x from "./file.ts"
+    "moduleResolution": "Bundler", // cách resolve module tối ưu cho bundler (esbuild/rollup)
+
+    // Best practices
+    "strict": true, // bật toàn bộ chế độ kiểm tra nghiêm ngặt của TS
+    "strictNullChecks": true, // bắt buộc xử lý null/undefined rõ ràng
+    "noUncheckedIndexedAccess": true, // khi truy cập mảng/obj bằng index signature, kết quả có thể undefined
+    "noImplicitOverride": true, // bắt buộc dùng từ khóa override khi ghi đè method của class cha
+    "noImplicitAny": true, // không cho phép biến/method tự động có kiểu any
+    "noImplicitThis": true, // không cho phép this có kiểu any
+    "skipLibCheck": true, // bỏ qua kiểm tra type trong file .d.ts (nhanh hơn, ít lỗi vặt)
+    "exactOptionalPropertyTypes": true, // optional property nếu tồn tại thì phải đúng type đã khai báo
+    "useUnknownInCatchVariables": true, // biến trong catch mặc định là unknown, buộc phải check trước khi dùng
+
+    "esModuleInterop": true, // cho phép import default từ CommonJS (ví dụ: import express from "express")
+    "resolveJsonModule": true, // cho phép import file .json trực tiếp
+
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false, // cảnh báo nếu có biến khai báo nhưng không dùng
+    "noUnusedParameters": false, // cảnh báo nếu hàm có tham số không dùng
+    "noPropertyAccessFromIndexSignature": false, // bắt buộc truy cập property qua index signature phải an toàn
+
+    "baseUrl": ".", // gốc để tính alias
+    "paths": {
+      "@/*": ["src/*"] // alias @ → src
+    }
+  },
+  "include": ["src/**/*"], // chỉ kiểm tra type trong src
+  "exclude": ["dist", "node_modules"] // bỏ qua dist và node_modules
+}

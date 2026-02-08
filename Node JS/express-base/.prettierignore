@@ -1,0 +1,8 @@
+.husky
+
+dist/
+node_modules/
+ssl/
+
+bun.lockb
+commitlint.config.js
