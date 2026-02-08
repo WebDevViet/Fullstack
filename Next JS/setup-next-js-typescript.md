@@ -119,7 +119,7 @@ const eslintConfig = defineConfig([
       'no-multiple-empty-lines': ['warn', { max: 1, maxBOF: 0, maxEOF: 0 }],
       // Cảnh báo khi sử dụng loại 'any' trong TypeScript
       '@typescript-eslint/no-explicit-any': 'warn',
-      // Cảnh báo khi sử dụng object rỗng
+      // Cảnh báo khi khai báo type là 1 obj rỗng
       '@typescript-eslint/no-empty-object-type': 'warn',
       // Cảnh báo khi có biến không được sử dụng
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }]
