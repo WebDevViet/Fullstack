@@ -137,8 +137,8 @@ _package.json_
 {
   "scripts": {
     //...
-    "lint": "eslint src --cache",
-    "lint-fix": "eslint src --fix",
+    "lint": "next lint",
+    "lint-fix": "next lint --fix",
     "prettier": "prettier --check \"src/**/*.{ts,tsx,css,scss}\"",
     "prettier-fix": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
     "check-format": "bun lint && bun prettier",
